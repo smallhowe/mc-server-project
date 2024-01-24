@@ -7,3 +7,16 @@ spring:
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
+  mail:
+    host: smtp.qq.com
+    username: smallhowe@qq.com
+    password: mfvrlpafndujdfia
+    properties:
+      from: smallhowe@qq.com
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+mybatis-plus:
+  mapper-locations: com/smallhowe/mapper/xml/*.xml
