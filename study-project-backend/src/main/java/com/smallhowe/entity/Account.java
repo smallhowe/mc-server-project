@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * <p>
@@ -29,4 +32,5 @@ public class Account implements Serializable {
     private String username;
 
     private String password;
+
 }

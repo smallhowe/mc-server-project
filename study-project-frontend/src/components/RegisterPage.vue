@@ -88,13 +88,13 @@ const onRegister=()=>{
         <el-input v-model="form.email" prefix-icon="Message" placeholder="请输入邮箱"></el-input>
       </el-form-item>
       <el-form-item prop="username">
-        <el-input v-model="form.username" prefix-icon="User" placeholder="请输入用户名"></el-input>
+        <el-input v-model="form.username" prefix-icon="User" placeholder="请输入用户名" ></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input v-model="form.password" prefix-icon="Lock" type="password" show-password placeholder="请输入密码"></el-input>
+        <el-input v-model="form.password" prefix-icon="Lock" type="password" show-password :maxlength="16" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="password_repeat">
-        <el-input v-model="form.password_repeat" prefix-icon="Lock" type="password" show-password placeholder="请再次输入密码"></el-input>
+        <el-input v-model="form.password_repeat" prefix-icon="Lock" type="password" show-password :maxlength="16" placeholder="请再次输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="code">
           <el-col :span="15" >

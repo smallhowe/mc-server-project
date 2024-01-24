@@ -2,19 +2,16 @@ package com.smallhowe;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
-import com.smallhowe.mapper.DbAccountMapper;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import java.util.Random;
+import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
 class StudyProjectBackendApplicationTests {
     @Resource
-    DbAccountMapper mapper;
+    RedisTemplate<String,Object> redisTemplate;
 
     @Test
     void contextLoads() {
