@@ -7,15 +7,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 @SpringBootTest
 class StudyProjectBackendApplicationTests {
     @Resource
-    RedisTemplate<String,Object> redisTemplate;
+    StringRedisTemplate template;
 
     @Test
     void contextLoads() {
-
+        System.out.println(template.getExpire("email:66F426023E6E66F95D941A57BA474006:4008611252@qq.com"));
     }
 
 

@@ -2,7 +2,7 @@
 import {ref} from "vue";
 import router from "@/router/index.js";
 import {ElMessage} from "element-plus";
-import {postGetCode} from "@/api/login.js";
+import {postGetCode,postRegister} from "@/api/login.js";
 
 const form=ref({
   email:'',
@@ -11,7 +11,8 @@ const form=ref({
   password_repeat:'',
   code:''
 });
-
+const codeTime = ref(0);
+const sendingEmail = ref(false);
 // 表单验证规则
 const checkUserName=(rule,value,callback)=>{
   if (value === '') {
@@ -58,23 +59,57 @@ const onValidate=(prop,isValid)=> {
 }
 // 验证码
 const getCode = async () => {
-  const {data}=await postGetCode({email:form.value.email})
+  sendingEmail.value = true;
+  const {data} = await postGetCode({email: form.value.email});
+
+  if (data.status === 200){
+    codeTime.value = 60;
+    const timer = setInterval(() => {
+      if (codeTime.value > 0)
+        codeTime.value--
+      else clearInterval(timer)
+    },1000);
+  }else if (data.status === 401) {
+    codeTime.value = data.expire - 120;
+    const timer = setInterval(() => {
+      if (codeTime.value > 0)
+        codeTime.value--
+      else clearInterval(timer)
+    },1000);
+  }
+  sendingEmail.value = false;
 };
 
 // 注册按钮
 const registerForm=ref()
-const onRegister=()=>{
-  registerForm.value.validate((isValid)=>{
-    if (!isValid){
+const onRegister = async () => {
+  const isCheck=await registerForm.value.validate((isValid) => {
+    //校验注册表单
+    if (!isValid) {
       ElMessage({
         type: 'warning',
         message: '请完整填写注册信息',
         grouping: true
       })
-      return
     }
   })
-}
+  if (!isCheck) return;
+
+
+  const {email, username, password, code} = form.value;
+  const {data} = await postRegister({
+    email,
+    username,
+    password,
+    code
+  });
+  if (data.status === 200){
+    setTimeout(()=>{
+      router.push('/login')
+    },2000)
+  }
+
+};
 </script>
 
 <template>
@@ -85,26 +120,26 @@ const onRegister=()=>{
     </div>
     <el-form class="register-form" :rules="rules" :model="form" @validate="onValidate"  ref="registerForm" >
       <el-form-item prop="email" >
-        <el-input v-model="form.email" prefix-icon="Message" placeholder="请输入邮箱"></el-input>
+        <el-input v-model="form.email" prefix-icon="Message" placeholder="请输入邮箱" tabindex="1"></el-input>
       </el-form-item>
       <el-form-item prop="username">
-        <el-input v-model="form.username" prefix-icon="User" placeholder="请输入用户名" ></el-input>
+        <el-input v-model="form.username" prefix-icon="User" placeholder="请输入用户名" tabindex="2"></el-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input v-model="form.password" prefix-icon="Lock" type="password" show-password :maxlength="16" placeholder="请输入密码"></el-input>
+        <el-input v-model="form.password" prefix-icon="Lock" type="password" show-password :maxlength="16" placeholder="请输入密码" tabindex="3"></el-input>
       </el-form-item>
       <el-form-item prop="password_repeat">
-        <el-input v-model="form.password_repeat" prefix-icon="Lock" type="password" show-password :maxlength="16" placeholder="请再次输入密码"></el-input>
+        <el-input v-model="form.password_repeat" prefix-icon="Lock" type="password" show-password :maxlength="16" placeholder="请再次输入密码" tabindex="4"></el-input>
       </el-form-item>
       <el-form-item prop="code">
           <el-col :span="15" >
-            <el-input v-model="form.code" prefix-icon="EditPen" placeholder="请输入验证码"></el-input>
+            <el-input v-model="form.code" prefix-icon="EditPen" placeholder="请输入验证码" tabindex="6"></el-input>
           </el-col>
           <el-col :span="8" :offset="1">
-            <el-button type="success" :disabled="!isEmailValid" @click="getCode">获取验证码</el-button>
+            <el-button type="success" :disabled="!isEmailValid || codeTime>0" :loading="sendingEmail" @click="getCode" tabindex="5">{{codeTime>0?codeTime+'秒后可重试':'获取验证码'}}</el-button>
           </el-col>
       </el-form-item>
-      <el-button plain type="primary"  class="register-btn" @click="onRegister">注册</el-button>
+      <el-button plain type="primary"  class="register-btn" @click="onRegister" tabindex="7">注册</el-button>
     </el-form>
     <div class="bottom">
 

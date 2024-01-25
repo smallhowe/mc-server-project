@@ -7,8 +7,11 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * <p>
@@ -26,12 +29,20 @@ public class DbAccountController {
     private final String USERNAME_REGEX = "^[a-zA-Z0-9一-龥]+$";
     @Resource
     private DbAccountService accountService;
+    @Resource
+    private StringRedisTemplate template;
 
     @PostMapping("/valid-email")
     public RestBean<String> validateEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam String email, HttpSession session) {
+
+
+
         int status = accountService.sendValidateEmail(email, session.getId());
+        Long expire = Optional.ofNullable(template.getExpire("email:" + session.getId() + ":" + email)).orElse(0L);
+        if (expire <= 120L) expire = 0L;
+
         return switch (status) {
-            case 0 -> RestBean.success("验证邮件已发送");
+            case 0 -> RestBean.failure(401, "邮件已发送,请勿频繁发送！", expire.toString());
             case 1 -> RestBean.success("已发送验证邮件，请注意查收");
             case 2 -> RestBean.failure(400, "邮箱已注册");
             default -> RestBean.failure(400, "发送邮件失败，请联系管理员");
