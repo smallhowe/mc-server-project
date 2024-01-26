@@ -2,7 +2,7 @@
 import {ref} from "vue";
 import router from "@/router/index.js";
 import {ElMessage} from "element-plus";
-import {postGetCode,postRegister} from "@/api/login.js";
+import {postGetCode,postRegister} from "@/api/register.js";
 
 const form=ref({
   email:'',

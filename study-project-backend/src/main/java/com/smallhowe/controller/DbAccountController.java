@@ -84,7 +84,7 @@ public class DbAccountController {
         String s = accountService.validateOnly(email, code, session.getId());
         if (s == null) {
             session.setAttribute("reset-password", email);
-            return RestBean.success();
+            return RestBean.success("验证成功");
         }else{
             return RestBean.failure(400, s);
         }
@@ -93,7 +93,12 @@ public class DbAccountController {
     @PostMapping("/do-reset")
     public RestBean<String> resetPassword(@Length(min = 6,max = 16) @RequestParam String password,
                                           HttpSession session){
-        String email = session.getAttribute("reset-password").toString();
+        String email = "";
+        try{
+            email = session.getAttribute("reset-password").toString();
+        }catch(Exception e){
+            return RestBean.failure(500, "请重新验证邮箱");
+        }
         if (email == null) {
             return RestBean.failure(401, "请先完成邮箱验证");
         }else if (accountService.resetPassword(password,email)){
