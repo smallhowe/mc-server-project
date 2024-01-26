@@ -78,22 +78,16 @@ public class DbAccountServiceImpl implements DbAccountService {
     /**
      * 验证码发送模块
      * 返回值对应：
+     * 3=未注册
      * 2=已注册
      * 1=发送
      * 0=已发送
      * -1=异常
      */
     @Override
-    public int sendValidateEmail(String email, String sessionId) {
+    public int sendValidateEmail(String email, String sessionId, boolean hasAccount) {
 
-        //判断邮箱是否已经注册,已注册则返回2
-        LambdaQueryWrapper<Account> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(Account::getEmail, email);
-        if (mapper.selectOne(lqw) != null) {
-            return 2;
-        }
-
-        String key = "email:" + sessionId+":"+email;
+        String key = "email:" + sessionId + ":" + email + ":" + hasAccount;
         //判断是否已获取验证码
         String pattern = "email:" + sessionId + ":*";
         //判断是否本机已发起过
@@ -104,6 +98,16 @@ public class DbAccountServiceImpl implements DbAccountService {
         if (!checkRedisCodeExpired(pattern))
             return 0;
 
+        //判断邮箱是否已经注册,已注册则返回2,未注册返回3
+        LambdaQueryWrapper<Account> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(Account::getEmail, email);
+        Account account = mapper.selectOne(lqw);
+        if (hasAccount && account == null) {
+            return 3;
+        } else if (!hasAccount && account != null) {
+            return 2;
+        }
+
 
         Random random = new Random();
         int code = random.nextInt(89999) + 100000;
@@ -111,12 +115,12 @@ public class DbAccountServiceImpl implements DbAccountService {
         message.setFrom(from);
         message.setTo(email);
         message.setSubject("您的验证邮件");
-        message.setText("验证码是："+code);
-        try{
+        message.setText("验证码是：" + code);
+        try {
 
             mailSender.send(message);
-            template.opsForValue().set(key, String.valueOf(code),3, TimeUnit.MINUTES);
-        }catch (MailException e){
+            template.opsForValue().set(key, String.valueOf(code), 3, TimeUnit.MINUTES);
+        } catch (MailException e) {
             e.printStackTrace();
             return -1;
         }
@@ -135,19 +139,20 @@ public class DbAccountServiceImpl implements DbAccountService {
      */
     @Override
     public int validateAndRegister(String username, String password, String email, String code, String sessionId) {
+
+        //判断该邮箱是否获取过验证码
+        Set<String> keys = null;
+        keys = template.keys("email:*:" + email + ":false");
+        if (keys.size() < 1) {
+            return 2;
+        }
+
         //判断邮箱是否被注册
         LambdaQueryWrapper<Account> lqw = new LambdaQueryWrapper<>();
         lqw.eq(Account::getEmail, email);
         Account account = mapper.selectOne(lqw);
         if (account!=null)
             return 0;
-
-        //判断该邮箱是否获取过验证码
-        Set<String> keys = null;
-        keys = template.keys("email:*:" + email);
-        if (keys.size() < 1) {
-            return 2;
-        }
 
         /*
            检查输入的验证码与Redis存储的邮箱验证码是否一致
@@ -160,6 +165,7 @@ public class DbAccountServiceImpl implements DbAccountService {
             if (!flagCode.equals(code)){
                 flagCode = null;
             }else{
+                template.delete(k);
                 break;
             }
         }
@@ -175,6 +181,50 @@ public class DbAccountServiceImpl implements DbAccountService {
         account.setUsername(username);
         account.setPassword(password);
         int status = mapper.insert(account);
-        return status>0?1:-1;
+        return status > 0 ? 1 : -1;
+    }
+
+    @Override
+    public String validateOnly(String email, String code,String sessionId) {
+        String key="email:"+sessionId+":"+email+":true";
+
+        //判断该邮箱是否获取过验证码
+        Set<String> keys = null;
+        keys = template.keys("email:*:" + email + ":true");
+        if (keys.size() < 1) {
+            return "请先获取验证码";
+        }
+
+        /*
+           检查输入的验证码与Redis存储的邮箱验证码是否一致
+           如果都不一致则flagCode会=null
+           如果一致则flagCode会=code
+         */
+        String flagCode = null;
+        for (String k : keys){
+            flagCode=template.opsForValue().get(k);
+            if (!flagCode.equals(code)){
+                flagCode = null;
+            }else{
+                template.delete(k);
+                break;
+            }
+        }
+        //判断flagCode是否为null,如果为null则表示验证码错误
+        if (flagCode == null) {
+            return "验证码错误";
+        }
+        return null;
+
+    }
+
+    @Override
+    public boolean resetPassword(String password, String email) {
+        LambdaQueryWrapper<Account> lqw = new LambdaQueryWrapper<>();
+        lqw.eq(Account::getEmail, email);
+        Account account = new Account();
+        password = passwordEncoder.encode(password);
+        account.setPassword(password);
+        return mapper.update(account, lqw) > 0;
     }
 }

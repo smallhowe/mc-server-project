@@ -33,19 +33,31 @@ public class DbAccountController {
     private StringRedisTemplate template;
 
     @PostMapping("/valid-email")
-    public RestBean<String> validateEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam String email, HttpSession session) {
-
-
-
-        int status = accountService.sendValidateEmail(email, session.getId());
-        Long expire = Optional.ofNullable(template.getExpire("email:" + session.getId() + ":" + email)).orElse(0L);
+    public RestBean<String> validateRegisterEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam String email, HttpSession session) {
+        int status = accountService.sendValidateEmail(email, session.getId(),false);
+        Long expire = Optional.ofNullable(template.getExpire("email:" + session.getId() + ":" + email + ":false")).orElse(0L);
         if (expire <= 120L) expire = 0L;
 
         return switch (status) {
             case 0 -> RestBean.failure(401, "邮件已发送,请勿频繁发送！", expire.toString());
             case 1 -> RestBean.success("已发送验证邮件，请注意查收");
             case 2 -> RestBean.failure(400, "邮箱已注册");
-            default -> RestBean.failure(400, "发送邮件失败，请联系管理员");
+            case 3 -> RestBean.failure(400, "邮箱未注册");
+            default -> RestBean.failure(500, "发送邮件失败，请联系管理员");
+        };
+    }
+    @PostMapping("/valid-reset-email")
+    public RestBean<String> validateResetEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam String email, HttpSession session) {
+        int status = accountService.sendValidateEmail(email, session.getId(),true);
+        Long expire = Optional.ofNullable(template.getExpire("email:" + session.getId() + ":" + email + ":true")).orElse(0L);
+        if (expire <= 120L) expire = 0L;
+
+        return switch (status) {
+            case 0 -> RestBean.failure(401, "邮件已发送,请勿频繁发送！", expire.toString());
+            case 1 -> RestBean.success("已发送验证邮件，请注意查收");
+            case 2 -> RestBean.failure(400, "邮箱已注册");
+            case 3 -> RestBean.failure(400, "邮箱未注册");
+            default -> RestBean.failure(500, "发送邮件失败，请联系管理员");
         };
     }
 
@@ -61,7 +73,34 @@ public class DbAccountController {
             case 1 -> RestBean.success("注册成功");
             case 2 -> RestBean.failure(400, "请先获取验证码后再注册");
             case 3 -> RestBean.failure(400, "验证码错误,请重试");
-            default -> RestBean.failure(400, "注册失败，请联系管理员");
+            default -> RestBean.failure(500, "注册失败，请联系管理员");
         };
+    }
+
+    @PostMapping("/start-reset")
+    public RestBean<String> startReset(@Pattern(regexp = EMAIL_REGEX) @RequestParam String email,
+                                               @Length(min = 6,max = 6) @RequestParam String code,
+                                               HttpSession session) {
+        String s = accountService.validateOnly(email, code, session.getId());
+        if (s == null) {
+            session.setAttribute("reset-password", email);
+            return RestBean.success();
+        }else{
+            return RestBean.failure(400, s);
+        }
+    }
+
+    @PostMapping("/do-reset")
+    public RestBean<String> resetPassword(@Length(min = 6,max = 16) @RequestParam String password,
+                                          HttpSession session){
+        String email = session.getAttribute("reset-password").toString();
+        if (email == null) {
+            return RestBean.failure(401, "请先完成邮箱验证");
+        }else if (accountService.resetPassword(password,email)){
+            session.removeAttribute("reset-password");
+            return RestBean.success("密码重置成功");
+        }else {
+            return RestBean.failure(500, "密码重置失败，请联系管理员");
+        }
     }
 }
