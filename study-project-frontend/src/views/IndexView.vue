@@ -3,7 +3,7 @@ import {getLogOut} from "@/api/login.js";
 import router from "@/router/index.js";
 
 const logout=async ()=>{
-  await getLogOut().then(res=>{
+  await getLogOut().then(()=>{
     router.replace("/login")
   })
 }

@@ -66,7 +66,7 @@ const login = async ()=>{
         </el-form-item>
         <el-row class="sel">
           <el-col :span="12"><el-checkbox v-model="form.remember" label="记住我" size="large" /></el-col>
-          <el-col :span="12"><el-link href="https://element-plus.org" target="_blank">忘记密码？</el-link></el-col>
+          <el-col :span="12"><el-link @click="router.push('/forget')" target="_blank">忘记密码？</el-link></el-col>
         </el-row>
       </el-form>
       <el-button @click="login" plain type="success">登录</el-button>
@@ -79,6 +79,13 @@ const login = async ()=>{
 </template>
 
 <style scoped lang="less">
+.login{
+  margin-top:20vh;
+  height: 100%;
+  @media (max-width: 991px){
+    margin-top:0;
+  }
+}
 .login-title {
   text-align: center;
   font-size: 12px;

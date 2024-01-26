@@ -95,7 +95,6 @@ const onRegister = async () => {
   })
   if (!isCheck) return;
 
-
   const {email, username, password, code} = form.value;
   const {data} = await postRegister({
     email,
@@ -142,13 +141,19 @@ const onRegister = async () => {
       <el-button plain type="primary"  class="register-btn" @click="onRegister" tabindex="7">注册</el-button>
     </el-form>
     <div class="bottom">
-
       <el-divider content-position="center"><el-link disabled style="color: #666">已有账号？</el-link>&nbsp;<el-link @click="router.push('/login')" type="primary">立即登录</el-link></el-divider>
     </div>
   </div>
 </template>
 
 <style scoped lang="less">
+.register{
+  margin-top:20vh;
+  height: 100%;
+  @media (max-width: 991px){
+    margin-top:0;
+  }
+}
 .register-title {
   text-align: center;
   padding: 0 20px;
@@ -179,9 +184,6 @@ const onRegister = async () => {
   align-items: center;
   padding: 0 20px;
   white-space: nowrap;
-  .el-button{
-    width: 80%;
-  }
 }
 .el-button{
   width: 100%;

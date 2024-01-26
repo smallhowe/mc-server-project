@@ -1,9 +1,4 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import LoginOrRegister from "@/views/LoginOrRegister.vue";
-
-const LoginPage = ()=> import('@/components/LoginPage.vue')
-const RegisterPage=()=>import('@/components/RegisterPage.vue')
-const Index = () => import('@/views/IndexView.vue')
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,23 +7,28 @@ const router = createRouter({
             path: '/',
             name: 'welcome',
             redirect: '/login',
-            component: LoginOrRegister,
+            component: ()=>import("@/views/LoginOrRegister.vue"),
             children:[
                 {
                     path:'/login',
                     name: 'login',
-                    component:LoginPage
+                    component:()=> import('@/components/LoginPage.vue')
                 },
                 {
                     path:'/register',
                     name: 'register',
-                    component:RegisterPage
-                }
+                    component:()=>import('@/components/RegisterPage.vue')
+                },
+                {
+                    path:'/forget',
+                    name: 'forget',
+                    component:()=>import('@/components/ForgetPage.vue')
+                },
             ]
         },
         {
             path: '/index',
-            component: Index
+            component: () => import('@/views/IndexView.vue')
         }
 
     ]

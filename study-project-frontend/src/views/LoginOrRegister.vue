@@ -29,6 +29,9 @@
   height: 100vh;
   .left {
     overflow: hidden;
+    width: 100%;
+    @media (max-width: 991px) {
+    }
     img {
       width: 100%;
       height: 100%;
@@ -38,7 +41,6 @@
   .right {
     overflow: hidden;
     background: white;
-    padding: 20vh 0 0 0;
     @media (max-width: 991px) {
       padding: 10px 0;
     }
