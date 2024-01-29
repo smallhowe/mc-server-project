@@ -1,5 +1,5 @@
 <script setup>
-import {ref} from "vue";
+import {ref,onMounted} from "vue";
 import router from "@/router/index.js";
 import {ElMessage} from "element-plus";
 import {postGetCode,postRegister} from "@/api/register.js";
@@ -79,7 +79,7 @@ const getCode = async () => {
   }
   sendingEmail.value = false;
 };
-
+const name_repeat_msg=ref('')
 // 注册按钮
 const registerForm=ref()
 const onRegister = async () => {
@@ -102,13 +102,17 @@ const onRegister = async () => {
     password,
     code
   });
+
   if (data.status === 200){
     setTimeout(()=>{
       router.push('/login')
     },2000)
+  }else if (data.status === 401){
+    ElMessage.closeAll();
+    name_repeat_msg.value = data.msg;
   }
-
 };
+
 </script>
 
 <template>
@@ -121,8 +125,8 @@ const onRegister = async () => {
       <el-form-item prop="email" >
         <el-input v-model="form.email" prefix-icon="Message" placeholder="请输入邮箱" tabindex="1"></el-input>
       </el-form-item>
-      <el-form-item prop="username">
-        <el-input v-model="form.username" prefix-icon="User" placeholder="请输入用户名" tabindex="2"></el-input>
+      <el-form-item :error="name_repeat_msg"  prop="username">
+        <el-input v-model="form.username" prefix-icon="User" @input="name_repeat_msg=''" placeholder="请输入用户名" tabindex="2"></el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input v-model="form.password" prefix-icon="Lock" type="password" show-password :maxlength="16" placeholder="请输入密码" tabindex="3"></el-input>

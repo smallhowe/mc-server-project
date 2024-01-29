@@ -131,10 +131,11 @@ public class DbAccountServiceImpl implements DbAccountService {
     /**
      * 注册模块
      * 返回值对应:
+     * 4=用户名被占用
      * 3=验证码错误
      * 2=未获取验证码
      * 1=注册成功
-     * 0=已被注册
+     * 0=邮箱已被注册
      * -1=异常
      */
     @Override
@@ -151,8 +152,15 @@ public class DbAccountServiceImpl implements DbAccountService {
         LambdaQueryWrapper<Account> lqw = new LambdaQueryWrapper<>();
         lqw.eq(Account::getEmail, email);
         Account account = mapper.selectOne(lqw);
+        lqw.clear();
         if (account!=null)
             return 0;
+        //判断用户名是否被占用
+        lqw.eq(Account::getUsername, username);
+        account=mapper.selectOne(lqw);
+        if (account!=null)
+            return 4;
+
 
         /*
            检查输入的验证码与Redis存储的邮箱验证码是否一致

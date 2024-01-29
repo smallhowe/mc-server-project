@@ -73,6 +73,7 @@ public class DbAccountController {
             case 1 -> RestBean.success("注册成功");
             case 2 -> RestBean.failure(400, "请先获取验证码后再注册");
             case 3 -> RestBean.failure(400, "验证码错误,请重试");
+            case 4 -> RestBean.failure(401, "用户名已被占用");
             default -> RestBean.failure(500, "注册失败，请联系管理员");
         };
     }
