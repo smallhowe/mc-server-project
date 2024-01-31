@@ -2,8 +2,8 @@ package com.smallhowe.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.smallhowe.entity.Account;
-import com.smallhowe.mapper.DbAccountMapper;
-import com.smallhowe.service.DbAccountService;
+import com.smallhowe.mapper.AccountMapper;
+import com.smallhowe.service.AccountService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -28,9 +28,9 @@ import java.util.concurrent.TimeUnit;
  * @since 2024-01-20
  */
 @Service
-public class DbAccountServiceImpl implements DbAccountService {
+public class AccountServiceImpl implements AccountService {
     @Resource
-    private DbAccountMapper mapper;
+    private AccountMapper mapper;
     @Resource
     private MailSender mailSender;
     @Resource

@@ -2,7 +2,10 @@
 
 import router from "@/router/index.js";
 import {ref} from "vue";
-import {postLogin} from "@/api/login.js";
+import {getUserInfo, postLogin} from "@/api/login.js";
+import {useUserStore} from "@/stores/userStore.js";
+
+const store = useUserStore();
 
 const form = ref({
   username: '',
@@ -38,7 +41,14 @@ const login = async ()=>{
     return
   }
   loading.close()
-  await router.push("/index")
+
+  await getUserInfo().then(res=>{
+    if (res.data.status === 200){
+      store.user=res.data.data
+      router.push("/index")
+    }
+  })
+
 
 
 }

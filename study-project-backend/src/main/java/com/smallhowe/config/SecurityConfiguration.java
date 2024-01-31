@@ -2,8 +2,7 @@ package com.smallhowe.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smallhowe.entity.RestBean;
-import com.smallhowe.service.DbAccountService;
-import com.smallhowe.service.impl.DbAccountServiceImpl;
+import com.smallhowe.service.AccountService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -29,7 +28,7 @@ import java.io.IOException;
 public class SecurityConfiguration {
 
     @Resource
-    private DbAccountService accountService;
+    private AccountService accountService;
     @Resource
     private DataSource dataSource;
 
@@ -48,8 +47,10 @@ public class SecurityConfiguration {
                             .failureHandler(this::onAuthenticationFailure);
                 })
                 .logout(l -> {
-                    l.logoutUrl("/api/auth/logout");
-                    l.logoutSuccessHandler(this::onLogoutSuccess);
+                    l.logoutUrl("/api/auth/logout")
+                            .logoutSuccessHandler(this::onLogoutSuccess)
+                            .invalidateHttpSession(true)
+                            .clearAuthentication(true);
                 })
                 .rememberMe(r -> {
                     r
@@ -124,12 +125,13 @@ public class SecurityConfiguration {
         ObjectMapper om = new ObjectMapper();
         String result = om.writeValueAsString(RestBean.success("退出成功"));
         response.getWriter().write(result);
+
     }
 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         response.setCharacterEncoding("UTF-8");
         ObjectMapper om = new ObjectMapper();
-        String result = om.writeValueAsString(RestBean.failure(401, authException.getMessage()));
+        String result = om.writeValueAsString(RestBean.failure(401, "未登录"));
         response.getWriter().write(result);
     }
 

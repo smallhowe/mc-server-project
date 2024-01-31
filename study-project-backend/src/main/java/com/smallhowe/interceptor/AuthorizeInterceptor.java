@@ -2,9 +2,8 @@ package com.smallhowe.interceptor;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.smallhowe.entity.Account;
-import com.smallhowe.mapper.DbAccountMapper;
+import com.smallhowe.mapper.AccountMapper;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
@@ -17,7 +16,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class AuthorizeInterceptor implements HandlerInterceptor {
     @Resource
-    private DbAccountMapper mapper;
+    private AccountMapper mapper;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         SecurityContext context = SecurityContextHolder.getContext();

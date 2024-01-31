@@ -56,7 +56,7 @@ const getCode = async () => {
       else clearInterval(timer)
     },1000);
   }else if (data.status === 401) {
-    codeTime.value = data.expire - 120;
+    codeTime.value = data.data.expire - 120;
     const timer = setInterval(() => {
       if (codeTime.value > 0)
         codeTime.value--

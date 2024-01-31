@@ -1,9 +1,12 @@
 <script setup>
 import {getLogOut} from "@/api/login.js";
 import router from "@/router/index.js";
+import {useUserStore} from "@/stores/userStore.js";
 
+const store = useUserStore();
 const logout=async ()=>{
   await getLogOut().then(()=>{
+    store.user = null;
     router.replace("/login")
   })
 }

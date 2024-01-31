@@ -19,16 +19,22 @@ request.interceptors.response.use(function (response) {
     // 2xx 范围内的状态码都会触发该函数。
     // 对响应数据做点什么
 
+    if (response.data.msg === undefined || response.data.msg === null) {
+        return response;
+    }
+
     if (response.data.status === 200)
         ElMessage({
             message: response.data.msg,
             type: 'success'
         })
-    else
+    else {
         ElMessage({
             message: response.data.msg,
             type: 'error'
         })
+    }
+
     return response;
 
 }, function (error) {

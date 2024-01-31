@@ -12,5 +12,9 @@ export function postLogin(data) {
 }
 
 export function getLogOut(){
-    return request.get('/api/auth/logout')
+    return request.get('/api/auth/logout',config)
+}
+
+export function getUserInfo(){
+    return request.get('/api/user/me',config)
 }
