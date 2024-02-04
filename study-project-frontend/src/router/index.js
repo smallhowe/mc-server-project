@@ -13,7 +13,7 @@ const router = createRouter({
                 {
                     path:'/login',
                     name: 'wel-login',
-                    component:()=> import('@/components/LoginPage.vue')
+                    component:()=> import('@/components/LoginPage.vue'),
                 },
                 {
                     path:'/register',
@@ -40,13 +40,11 @@ router.beforeEach((to,from,next)=>{
     const store = useUserStore();
 
     if (store.user === null && (!to.name.startsWith('wel-'))) {
-        console.log('未登录')
         next('/login')
     }else if(store.user !== null && to.name.startsWith('wel-')){
-        console.log('已登录')
         next('/index')
     }else{
-        console.log('其他',to.path)
+
         next();
     }
 })

@@ -44,7 +44,9 @@ class StudyProjectBackendApplicationTests {
                             .build();
                 })
                 .strategyConfig(builder -> {
-                    builder.addTablePrefix("db_").build();
+                    builder.addTablePrefix("db_")
+                            .addExclude("persistent_logins")
+                            .build();
                     builder.entityBuilder()
                             .idType(IdType.AUTO)
                             .enableLombok()

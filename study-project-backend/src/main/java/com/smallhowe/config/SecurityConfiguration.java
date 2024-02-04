@@ -37,7 +37,10 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(request -> {
                     // 针对HTTP请求进行授权规则设置
-                    request.requestMatchers("/api/auth/**").permitAll().anyRequest().authenticated();
+                    request.requestMatchers("/api/auth/**","/resource/download/**")
+                            .permitAll()
+                            .anyRequest()
+                            .authenticated();
                 })
                 .formLogin(form -> {
                     // 配置登录页
