@@ -16,10 +16,14 @@ const logout=async ()=>{
 <template>
   <div class="index-view">
     <NavMenu :userinfo="store.user" @logout="logout"></NavMenu>
-    <div class="index-main">
-      欢迎进入平台
-      <el-button type="danger" @click="logout" plain >退出登录</el-button>
-      <div style="height: 1000px;background: #181818;opacity: 0.5">666</div>
+    <div class="index-bg">
+      <el-scrollbar class="index-main">
+        <router-view v-slot="{Component}">
+          <transition name="el-fade-in">
+            <component v-show="true" :is="Component"/>
+          </transition>
+        </router-view>
+      </el-scrollbar>
     </div>
   </div>
 </template>
@@ -30,25 +34,21 @@ const logout=async ()=>{
   width: 100vw;
   height: 100vh;
   position: relative;
-  overflow-x: hidden;
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-thumb{
-    background-color: rgba(150,150,150,0.8);
-    border-radius: 6px;
-  }
-  ::-webkit-scrollbar-thumb:hover{
-    background-color: rgba(150,150,150,0.9);
-  }
-}
-.index-main{
-  flex: 1;
-  color: #181818;
-  overflow-y: scroll;
+  min-width: 685px;
 
+}
+.index-bg{
   background-image: url("http://localhost:8085/img/503454.jpg");
   background-size: cover;
+  flex: 1;
+  box-sizing: border-box;
+}
+.index-main{
+  color: #181818;
+  padding: 0 20px 0;
+  div:first-child{
+    margin-top: 20px;
+  }
 }
 
 </style>

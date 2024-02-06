@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-const props=defineProps(['userinfo'])
+const props=defineProps({
+  userinfo:Object
+})
 const isCollapse = ref(true)
 const groupImgLoading=ref(true)
 const emits=defineEmits(['logout'])
@@ -25,8 +27,9 @@ const controlNav=()=>{
 <template>
   <div class="nav-menu">
     <el-menu
-        default-active="1"
+        default-active="/index/home"
         class="el-menu-vertical-demo"
+        :router="true"
         :collapse="isCollapse"
     >
       <el-menu-item class="is-collapse" @click="controlNav">
@@ -40,17 +43,17 @@ const controlNav=()=>{
             <span>{{userinfo.username}}</span>
           </div>
         </el-menu-item>
-        <el-menu-item index="1">
+        <el-menu-item route="/index/home" index="/index/home">
           <el-icon><House /></el-icon>
           <template #title>首页</template>
         </el-menu-item>
-        <el-menu-item index="2">
+        <el-menu-item route="/index/message" index="/index/message">
           <el-icon><Message /></el-icon>
           <template #title>消息</template>
         </el-menu-item>
 
       <el-tooltip :persistent="true" placement="right">
-        <el-menu-item>
+        <el-menu-item >
           <el-icon><ChatLineRound /></el-icon>
           <span>加入群聊</span>
         </el-menu-item>
@@ -73,19 +76,19 @@ const controlNav=()=>{
         </template>
       </el-tooltip>
 
-      <el-menu-item index="3">
+      <el-menu-item index="/index/download">
         <el-icon><FolderOpened /></el-icon>
         <template #title>
           <span>下载资源</span>
         </template>
       </el-menu-item>
 
-      <el-sub-menu>
+      <el-sub-menu index="4">
         <template #title>
           <el-icon><setting /></el-icon>
           <span>设置</span>
         </template>
-        <el-menu-item index="4">
+        <el-menu-item index="/index/user/1">
           <el-icon><User /></el-icon>
           <span>账户信息</span>
         </el-menu-item>

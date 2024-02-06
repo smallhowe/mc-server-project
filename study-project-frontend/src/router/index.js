@@ -30,7 +30,26 @@ const router = createRouter({
         {
             path: '/index',
             name: 'index',
-            component: () => import('@/views/IndexView.vue')
+            component: () => import('@/views/IndexView.vue'),
+            redirect:'/index/home',
+            children:[
+                {
+                    path: 'home',
+                    component:()=>import('@/views/IndexMain/HomeView.vue'),
+                },
+                {
+                    path:'message',
+                    component:()=>import('@/views/IndexMain/MessageView.vue'),
+                },
+                {
+                    path: 'download',
+                    component:()=>import('@/views/IndexMain/DownloadView.vue'),
+                },
+                {
+                    path: 'user/:id',
+                    component:()=>import('@/views/IndexMain/UserInfoView.vue')
+                }
+            ]
         }
 
     ]
@@ -39,12 +58,14 @@ const router = createRouter({
 router.beforeEach((to,from,next)=>{
     const store = useUserStore();
 
+    if (to.name===undefined)
+        next()
+
     if (store.user === null && (!to.name.startsWith('wel-'))) {
         next('/login')
     }else if(store.user !== null && to.name.startsWith('wel-')){
         next('/index')
     }else{
-
         next();
     }
 })
