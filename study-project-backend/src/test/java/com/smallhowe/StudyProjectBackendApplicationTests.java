@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.util.List;
+
 @SpringBootTest
 class StudyProjectBackendApplicationTests {
     @Resource
@@ -16,7 +18,9 @@ class StudyProjectBackendApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(template.getExpire("email:66F426023E6E66F95D941A57BA474006:4008611252@qq.com"));
+        String path = "D:\\abc\\c";
+        path = path.replace("\\", "/");
+        System.out.println(path.endsWith("/"));
     }
 
 

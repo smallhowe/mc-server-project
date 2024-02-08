@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -32,5 +34,15 @@ public class Account implements Serializable {
     private String username;
 
     private String password;
+
+    private Integer groups;
+
+    private Long exp;
+
+    private String avatarUrl;
+
+    private String avatarPath;
+
+    private LocalDateTime createTime;
 
 }

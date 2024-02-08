@@ -37,7 +37,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(request -> {
                     // 针对HTTP请求进行授权规则设置
-                    request.requestMatchers("/api/auth/**","/resource/download/**")
+                    request.requestMatchers("/api/auth/**","/resource/download/**","/img/**")
                             .permitAll()
                             .anyRequest()
                             .authenticated();
