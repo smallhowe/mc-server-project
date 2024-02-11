@@ -1,8 +1,10 @@
 package com.smallhowe.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.smallhowe.entity.Account;
 import com.smallhowe.entity.RestBean;
 import com.smallhowe.mapper.AccountMapper;
+import com.smallhowe.service.SignInService;
 import com.smallhowe.service.UserService;
 import com.smallhowe.utils.ImageUtils;
 import jakarta.annotation.Resource;
@@ -27,8 +29,11 @@ import java.util.UUID;
  */
 @Service
 public class UserServiceImpl implements UserService {
+    public static final int SIGN_IN_EXP = 50;
     @Resource
     private AccountMapper accountMapper;
+    @Resource
+    private SignInService signInService;
     @Resource
     private ImageUtils imageUtils;
     @Override
@@ -57,5 +62,24 @@ public class UserServiceImpl implements UserService {
         accountMapper.updateById(accountAvatar);
 
         return 1;
+    }
+
+    @Override
+    public boolean signIn(Account account) {
+
+        //今日有签到记录则返回false表示已签到
+        if (signInService.isSignIn(account)) return false;
+
+        //为用户设置签到经验值
+        Account signInAccount = new Account();
+        signInAccount.setId(account.getId());
+        signInAccount.setExp(account.getExp() + SIGN_IN_EXP);
+        accountMapper.updateById(signInAccount);
+
+        //保存签到记录
+        signInService.saveSignIn(signInAccount.getId(), SIGN_IN_EXP);
+
+
+        return true;
     }
 }

@@ -7,4 +7,5 @@ import java.io.File;
 
 public interface UserService {
     int uploadAvatar(MultipartFile avatar, Account account);
+    boolean signIn(Account account);
 }
