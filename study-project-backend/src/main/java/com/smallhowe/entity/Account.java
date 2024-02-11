@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -39,6 +40,15 @@ public class Account implements Serializable {
     private Integer groups;
 
     private Long exp;
+
+    @TableField(exist = false)
+    private Long nextExp;
+
+    @TableField(exist = false)
+    private Integer level;
+
+    @TableField(exist = false)
+    private List<Levels> levelList;
 
     private String avatarUrl;
 

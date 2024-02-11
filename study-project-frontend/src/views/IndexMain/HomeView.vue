@@ -12,6 +12,8 @@ const serverInfo=reactive({
   serverStatus:1,
 })
 
+
+
 const accountLevel=reactive({
   exp:0,
   levels:[
@@ -32,14 +34,7 @@ const accountLevel=reactive({
 const loading=ref(false)
 const signIn= ()=>{
   loading.value=true
-  setTimeout(()=>{
-    accountLevel.exp+=50
-    ElMessageBox.alert("签到成功","提示",{
-      confirmButtonText:"确定",
-      type:"success"
-    })
-    loading.value=false
-  },300)
+
 
 }
 

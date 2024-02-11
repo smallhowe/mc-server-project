@@ -1,53 +1,33 @@
 <script setup>
-import {computed} from "vue";
+import {computed,toRefs} from "vue";
+import {useUserStore} from "@/stores/userStore.js";
 
-const {accountLevel, serverInfo} = defineProps(['accountLevel', 'serverInfo'])
+const {serverInfo} = defineProps(['serverInfo'])
 
+const store = useUserStore();
 
+const userinfo=toRefs(store.user)
+const getLevel=computed(() => {
+  return userinfo.level
+})
+const getNowTargetExp=computed(()=>{
+  return userinfo.levelList.value.find(item=>item.level===userinfo.level.value).exp
+})
+const getNowExp=computed(()=>{
+  return userinfo.exp.value-getNowTargetExp.value;
+})
+const getNextExp=computed(()=>{
+
+  return userinfo.nextExp.value-getNowTargetExp.value;
+})
 const serverPlayerNum = computed(() => {
   let percentage = serverInfo.serverNowPlayerNum / serverInfo.serverMaxPlayerNum * 100;
   return Number.parseFloat(percentage.toFixed(2))
 })
-const controlServe = () => {
-  serverInfo.serverStatus = serverInfo.serverStatus === 1 ? 0 : 1
-}
 
-
-const getLevel = computed(() => {
-  let levels = accountLevel.levels
-  for (let i = levels.length - 1; i >= 0; i--) {
-    if (accountLevel.exp >= levels[i].exp) {
-      return levels[i].level;
-    }
-  }
-})
-const getNowExp = computed(() => {
-  let levels = accountLevel.levels
-  for (let i = levels.length - 1; i >= 0; i--) {
-    if (accountLevel.exp >= levels[i].exp) {
-      return accountLevel.exp - levels[i].exp;
-    }
-  }
-})
-const getNextExp = computed(() => {
-  // 获取等级列表
-  let levels = accountLevel.levels
-  let level = 0
-  for (let i = 0; i < levels.length; i++) {
-    console.log(levels[i].level, "比较", getLevel.value)
-
-    if (getLevel.value === levels[i].level) {
-      level = levels[i + 1].exp - levels[i].exp
-      break
-    }
-  }
-  return level
-})
-const getExpPercent = computed(() => {
-  if (getLevel.value < 10)
-    return getNowExp.value / getNextExp.value * 100
-  else
-    return 100
+const getExpPercent=computed(()=>{
+  let percentage = getNowExp.value / getNextExp.value * 100;
+  return percentage.valueOf();
 })
 </script>
 
@@ -82,8 +62,8 @@ const getExpPercent = computed(() => {
           <el-progress :percentage="getExpPercent" type="circle">
             <template #default>
               <h4>当前经验值</h4>
-              <p v-if="getLevel<10" class="exp">{{ getNowExp }}/{{ getNextExp }}</p>
-              <p v-else class="exp" style="color: #f27304;font-weight: bold">MAX</p>
+              <p  class="exp">{{ getNowExp }}/{{ getNextExp }}</p>
+<!--              <p v-else class="exp" style="color: #f27304;font-weight: bold">MAX</p>-->
             </template>
           </el-progress>
           <p>Lv:{{ getLevel }}</p>

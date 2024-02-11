@@ -1,6 +1,9 @@
 package com.smallhowe.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smallhowe.entity.Account;
+import com.smallhowe.entity.Levels;
 import com.smallhowe.entity.RestBean;
 import com.smallhowe.service.UserService;
 import jakarta.annotation.Resource;
@@ -8,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +25,24 @@ public class UserController {
     public RestBean<Object> me(@SessionAttribute("account") Account account){
         account.setPassword(null);
         account.setAvatarPath(null);
+        List<Levels> initLevels = Levels.initLevels();
+        account.setLevelList(initLevels);
+
+        Integer maxLevel = initLevels.get(initLevels.size() - 1).getLevel();
+
+        for (int i = initLevels.size() - 1; i >= 0; i--) {
+            if (account.getExp() >= initLevels.get(i).getExp()) {
+                account.setLevel(initLevels.get(i).getLevel());
+                if (account.getLevel().equals(maxLevel)){
+                    account.setNextExp(0L);
+                }else{
+                    account.setNextExp(initLevels.get(i+1).getExp());
+                }
+                break;
+            }
+        }
+
+
         return RestBean.success(null,account);
     }
     //签到
