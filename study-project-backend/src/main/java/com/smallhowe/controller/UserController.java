@@ -20,6 +20,7 @@ public class UserController {
     @GetMapping("/me")
     public RestBean<Object> me(@SessionAttribute("account") Account account){
         account.setPassword(null);
+        account.setAvatarPath(null);
         return RestBean.success(null,account);
     }
     //签到

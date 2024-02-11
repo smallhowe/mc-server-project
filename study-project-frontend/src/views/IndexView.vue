@@ -1,21 +1,11 @@
 <script setup>
-import {getLogOut} from "@/api/login.js";
-import router from "@/router/index.js";
-import {useUserStore} from "@/stores/userStore.js";
 import NavMenu from "@/components/NavMenu.vue";
 
-const store = useUserStore();
-const logout=async ()=>{
-  await getLogOut().then(()=>{
-    store.user = null;
-    router.replace("/login")
-  })
-}
 </script>
 
 <template>
   <div class="index-view">
-    <NavMenu :userinfo="store.user" @logout="logout"></NavMenu>
+    <NavMenu></NavMenu>
     <div class="index-bg">
       <el-scrollbar class="index-main">
         <router-view v-slot="{Component}">

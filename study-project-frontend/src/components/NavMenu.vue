@@ -1,11 +1,21 @@
 <script setup>
-import { ref } from 'vue'
-const props=defineProps({
-  userinfo:Object
-})
+import { ref,toRefs } from 'vue'
+import {useUserStore} from "@/stores/userStore.js";
+import {getLogOut} from "@/api/login.js";
+import router from "@/router/index.js";
+
+const store=useUserStore()
+
+const userinfo = toRefs(store.user)
+
 const isCollapse = ref(true)
 const groupImgLoading=ref(true)
-const emits=defineEmits(['logout'])
+const logout=async ()=>{
+  await getLogOut().then(()=>{
+    store.user = null;
+    router.replace("/login")
+  })
+}
 
 const controlNav=()=>{
   if (isCollapse.value){
@@ -37,10 +47,10 @@ const controlNav=()=>{
       </el-menu-item>
         <el-menu-item class="user">
           <div class="avatar">
-            <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"/>
+            <el-avatar :src="userinfo.avatarUrl.value"/>
           </div>
           <div class="username">
-            <span>{{userinfo.username}}</span>
+            <span>{{userinfo.username.value}}</span>
           </div>
         </el-menu-item>
         <el-menu-item route="/index/home" index="/index/home">
@@ -94,7 +104,7 @@ const controlNav=()=>{
         </el-menu-item>
       </el-sub-menu>
 
-      <el-menu-item class="logout" @click="emits('logout')">
+      <el-menu-item class="logout" @click="logout">
         <el-icon><SwitchButton /></el-icon>
         <template #title>
           <span>退出登录</span>
