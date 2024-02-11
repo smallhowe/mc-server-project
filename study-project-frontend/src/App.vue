@@ -1,7 +1,7 @@
 <script setup>
 
 import {useUserStore} from "@/stores/userStore.js";
-import {getUserInfo} from "@/api/login.js";
+import {getUserInfo} from "@/api/user.js";
 import router from "@/router/index.js";
 import {ElMessage} from "element-plus"
 

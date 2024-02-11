@@ -2,9 +2,11 @@
 import TitleCard from "@/components/TitleCard.vue";
 import NewsComponent from "@/components/NewsComponent.vue";
 import ServerInfo from "@/components/ServerInfo.vue";
-import {reactive,ref} from "vue";
+import {reactive, ref} from "vue";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 import GotoDownload from "@/components/GotoDownload.vue";
+import {useUserStore} from "@/stores/userStore.js";
+import {getUserInfo, userSignIn} from "@/api/user.js";
 
 const serverInfo=reactive({
   serverNowPlayerNum:5,
@@ -12,30 +14,29 @@ const serverInfo=reactive({
   serverStatus:1,
 })
 
-
-
-const accountLevel=reactive({
-  exp:0,
-  levels:[
-    {level:0,exp:0},
-    {level:1,exp:100},
-    {level:2,exp:300},
-    {level:3,exp:600},
-    {level:4,exp:1000},
-    {level:5,exp:1500},
-    {level:6,exp:2000},
-    {level:7,exp:2600},
-    {level:8,exp:3300},
-    {level:9,exp:4100},
-    {level:10,exp:5000},
-  ]
-})
+const store = useUserStore();
 
 const loading=ref(false)
-const signIn= ()=>{
-  loading.value=true
+const isSignIn=ref(false)
+const signIn = () => {
+  loading.value = true
+  userSignIn().then(async res => {
+    const {data} = res
+    if (data.status !== 200) {
+      loading.value = false
+      isSignIn.value = true
+      return
+    }
+    let user = await getUserInfo()
+    user=user.data.data
+    console.log(user)
+    store.user.exp = user.exp
+    store.user.level = user.level
+    store.user.nextExp = user.nextExp
 
-
+    loading.value = false
+    isSignIn.value = true
+  })
 }
 
 </script>
@@ -45,9 +46,9 @@ const signIn= ()=>{
     <title-card title="首页">
       <template #right>
         <el-button :loading="loading"
-
-                    type="primary"
-                   plain @click="signIn">点击签到</el-button>
+                   :disabled="isSignIn"
+                    :type="isSignIn?'default':'primary'"
+                   plain @click="signIn">{{isSignIn?'今日已签到':'点击签到'}}</el-button>
       </template>
     </title-card>
 
@@ -55,7 +56,7 @@ const signIn= ()=>{
       <!-- 主页左侧内容 -->
       <el-col class="left" :span="24" :md="16">
         <!-- 服务器信息 -->
-        <ServerInfo :server-info="serverInfo" :account-level="accountLevel"></ServerInfo>
+        <ServerInfo :server-info="serverInfo"></ServerInfo>
         <CarouselComponent></CarouselComponent>
       </el-col>
 

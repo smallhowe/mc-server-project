@@ -2,7 +2,8 @@
 
 import router from "@/router/index.js";
 import {ref} from "vue";
-import {getUserInfo, postLogin} from "@/api/login.js";
+import {postLogin} from "@/api/login.js";
+import {getUserInfo} from "@/api/user.js";
 import {useUserStore} from "@/stores/userStore.js";
 
 const store = useUserStore();
