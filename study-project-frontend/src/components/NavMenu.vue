@@ -1,12 +1,12 @@
 <script setup>
-import { ref,toRefs } from 'vue'
+import { ref,toRef } from 'vue'
 import {useUserStore} from "@/stores/userStore.js";
 import {getLogOut} from "@/api/login.js";
 import router from "@/router/index.js";
 
 const store=useUserStore()
 
-const userinfo = toRefs(store.user)
+const userinfo = toRef(store,'user')
 
 const isCollapse = ref(true)
 const groupImgLoading=ref(true)
@@ -28,7 +28,6 @@ const controlNav=()=>{
     let user = document.querySelector('.user');
     user.classList.remove('user-active')
     isCollapse.value = true
-
   }
 }
 
@@ -47,10 +46,10 @@ const controlNav=()=>{
       </el-menu-item>
         <el-menu-item class="user">
           <div class="avatar">
-            <el-avatar :src="userinfo.avatarUrl.value"/>
+            <el-avatar :src="userinfo.avatarUrl"/>
           </div>
           <div class="username">
-            <span>{{userinfo.username.value}}</span>
+            <span>{{userinfo.username}}</span>
           </div>
         </el-menu-item>
         <el-menu-item route="/index/home" index="/index/home">

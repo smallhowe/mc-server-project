@@ -13,6 +13,7 @@ getUserInfo().then(res=>{
     router.replace("/index")
   }else{
     ElMessage.closeAll()
+    router.replace("/login")
   }
 })
 </script>

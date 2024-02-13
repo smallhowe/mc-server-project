@@ -1,8 +1,7 @@
 package com.smallhowe.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.smallhowe.entity.Account;
-import com.smallhowe.entity.RestBean;
+import com.smallhowe.entity.Levels;
 import com.smallhowe.mapper.AccountMapper;
 import com.smallhowe.service.SignInService;
 import com.smallhowe.service.UserService;
@@ -11,13 +10,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * <p>
@@ -65,10 +58,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean signIn(Account account) {
+    public int signIn(Account account) {
 
         //今日有签到记录则返回false表示已签到
-        if (signInService.isSignIn(account)) return false;
+        if (signInService.isSignIn(account)) return 0;
+
+        //判断用户是否达到最大等级
+        Levels maxLevel = Levels.getMaxLevel();
+        if (account.getExp()>= maxLevel.getExp()) {
+            return 2;
+        }
 
         //为用户设置签到经验值
         Account signInAccount = new Account();
@@ -80,6 +79,6 @@ public class UserServiceImpl implements UserService {
         signInService.saveSignIn(signInAccount.getId(), SIGN_IN_EXP);
 
 
-        return true;
+        return 1;
     }
 }

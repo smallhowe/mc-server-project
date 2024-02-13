@@ -1,20 +1,18 @@
 package com.smallhowe.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smallhowe.entity.Account;
 import com.smallhowe.entity.Levels;
 import com.smallhowe.entity.RestBean;
 import com.smallhowe.service.UserService;
+import com.smallhowe.service.impl.SignInServiceImpl;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -42,17 +40,27 @@ public class UserController {
             }
         }
 
-
         return RestBean.success(null,account);
     }
     //签到
     @GetMapping("/sign")
     public RestBean<Object> signIn(@SessionAttribute("account") Account account){
-        boolean flag = userService.signIn(account);
-        if (!flag) return RestBean.failure(400,"今日已签到");
-        Map<String, Integer> result = new HashMap<>();
-        result.put("getExp", 50);
-        return RestBean.success("签到成功",result);
+        int flag = userService.signIn(account);
+        Map<String, Object> result = new HashMap<>();
+        switch (flag){
+            case 0:
+                result.put("nextDate", getTomorrowSignInDate());
+                return RestBean.failure(400,"今日已签到",result);
+            case 1:
+                result.put("getExp", 50);
+                result.put("nextDate", getTomorrowSignInDate());
+                return RestBean.success("签到成功",result);
+            case 2:
+                return RestBean.success("已达最大等级，无需再签到");
+            default:
+                return RestBean.failure(400,"未知错误");
+        }
+
     }
 
     //上传头像
@@ -71,4 +79,14 @@ public class UserController {
     }
 
 
+    private long getTomorrowSignInDate(){
+        LocalDateTime ldt = LocalDateTime.now();
+        ldt = ldt.withHour(SignInServiceImpl.SIGN_IN_HOUR)
+                .withMinute(SignInServiceImpl.SIGN_IN_MINUTE)
+                .withSecond(0)
+                .withNano(0)
+                .plusDays(1);
+        Instant tomorrow = ldt.atZone(ZoneOffset.systemDefault()).toInstant();
+        return tomorrow.toEpochMilli();
+    }
 }

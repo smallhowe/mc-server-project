@@ -2,7 +2,7 @@
 import TitleCard from "@/components/TitleCard.vue";
 import NewsComponent from "@/components/NewsComponent.vue";
 import ServerInfo from "@/components/ServerInfo.vue";
-import {reactive, ref} from "vue";
+import {reactive, ref,toRef,computed} from "vue";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 import GotoDownload from "@/components/GotoDownload.vue";
 import {useUserStore} from "@/stores/userStore.js";
@@ -14,29 +14,40 @@ const serverInfo=reactive({
   serverStatus:1,
 })
 
+
+
 const store = useUserStore();
+const userinfo=toRef(store,'user')
 
 const loading=ref(false)
 const isSignIn=ref(false)
+
+const signInBtnMsg=()=>{
+  if (Date.now()<localStorage.getItem('signIn')){
+    isSignIn.value=true
+    return "今日已签到"
+  }
+  if (userinfo.value.exp>=5000){
+    isSignIn.value=true
+    return "等级已达上限"
+  }
+  return "点击签到"
+}
+
 const signIn = () => {
   loading.value = true
   userSignIn().then(async res => {
     const {data} = res
+    localStorage.setItem("signIn",data.data.nextDate)
     if (data.status !== 200) {
-      loading.value = false
-      isSignIn.value = true
+      isSignIn.value=true
       return
     }
     let user = await getUserInfo()
-    user=user.data.data
-    console.log(user)
-    store.user.exp = user.exp
-    store.user.level = user.level
-    store.user.nextExp = user.nextExp
-
-    loading.value = false
-    isSignIn.value = true
+    store.user=user.data.data
   })
+  loading.value = false
+  signInBtnMsg()
 }
 
 </script>
@@ -48,7 +59,7 @@ const signIn = () => {
         <el-button :loading="loading"
                    :disabled="isSignIn"
                     :type="isSignIn?'default':'primary'"
-                   plain @click="signIn">{{isSignIn?'今日已签到':'点击签到'}}</el-button>
+                   plain @click="signIn">{{signInBtnMsg()}}</el-button>
       </template>
     </title-card>
 

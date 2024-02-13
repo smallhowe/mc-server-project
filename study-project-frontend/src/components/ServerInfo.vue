@@ -1,5 +1,5 @@
 <script setup>
-import {computed,toRefs} from "vue";
+import {computed,toRef} from "vue";
 import {storeToRefs} from "pinia";
 import {useUserStore} from "@/stores/userStore.js";
 
@@ -7,19 +7,19 @@ const {serverInfo} = defineProps(['serverInfo'])
 
 const store = useUserStore();
 
-const userinfo=toRefs(store.user)
+const userinfo=toRef(store,'user')
 
 const getLevel=computed(() => {
-  return userinfo.level.value
+  return userinfo.value.level
 })
 const getNowTargetExp=computed(()=>{
-  return userinfo.levelList.value.find(item => item.level === userinfo.level.value).exp;
+  return userinfo.value.levelList.find(item => item.level === userinfo.value.level).exp;
 })
 const getNowExp=computed(()=>{
-  return userinfo.exp.value - getNowTargetExp.value;
+  return userinfo.value.exp - getNowTargetExp.value;
 })
 const getNextExp=computed(()=>{
-  return userinfo.nextExp.value - getNowTargetExp.value;
+  return userinfo.value.nextExp - getNowTargetExp.value;
 })
 const serverPlayerNum = computed(() => {
   let percentage = serverInfo.serverNowPlayerNum / serverInfo.serverMaxPlayerNum * 100;
@@ -63,7 +63,7 @@ const getExpPercent=computed(()=>{
           <el-progress :percentage="getExpPercent" type="circle">
             <template #default>
               <h4>当前经验值</h4>
-              <p v-if="getLevel<userinfo.levelList.value.length-1" class="exp">{{ getNowExp }}/{{ getNextExp }}</p>
+              <p v-if="getLevel<userinfo.levelList.length-1" class="exp">{{ getNowExp }}/{{ getNextExp }}</p>
               <p v-else class="exp" style="color: #f27304;font-weight: bold">MAX</p>
             </template>
           </el-progress>
