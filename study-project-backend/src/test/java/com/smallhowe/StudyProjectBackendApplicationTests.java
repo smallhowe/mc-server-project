@@ -1,20 +1,21 @@
 package com.smallhowe;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
-import com.smallhowe.entity.SignIn;
+
+import com.smallhowe.entity.mc.StatusResponse;
 import com.smallhowe.mapper.SignInMapper;
+import com.smallhowe.utils.ServerListPing;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
+
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+
 
 @SpringBootTest
 class StudyProjectBackendApplicationTests {
@@ -23,14 +24,17 @@ class StudyProjectBackendApplicationTests {
     @Resource
     SignInMapper signInMapper;
 
-
+    private static final int MC_SERVER_PORT = 25565;
     @Test
-    void contextLoads() {
-        LocalDateTime ldt = LocalDateTime.now();
-        ldt = ldt.withHour(0).withMinute(0).withSecond(0).withNano(0);
-        ldt=ldt.plusDays(1);
-        System.out.println(ldt);
+    void contextLoads() throws IOException {
+        ServerListPing serverListPing = new ServerListPing();
+        InetSocketAddress address = new InetSocketAddress("127.0.0.1", MC_SERVER_PORT);
+        serverListPing.setAddress(address);
+        StatusResponse statusResponse = serverListPing.fetchData();
+        System.out.println(statusResponse);
+
     }
+
 
 
     @Value("${spring.datasource.url}")
