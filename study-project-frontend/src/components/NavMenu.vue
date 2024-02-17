@@ -46,7 +46,7 @@ const controlNav=()=>{
       </el-menu-item>
         <el-menu-item class="user">
           <div class="avatar">
-            <el-avatar :src="userinfo.avatarUrl"/>
+            <el-avatar v-if="userinfo.avatarUrl" :src="userinfo.avatarUrl"/>
           </div>
           <div class="username">
             <span>{{userinfo.username}}</span>

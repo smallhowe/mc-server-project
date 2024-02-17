@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import {useUserStore} from "@/stores/userStore.js";
 
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -8,22 +9,22 @@ const router = createRouter({
             path: '/',
             name: 'welcome',
             redirect: '/login',
-            component: ()=>import("@/views/LoginOrRegister.vue"),
+            component: () => import("@/views/LoginOrRegister.vue"),
             children:[
                 {
                     path:'/login',
                     name: 'wel-login',
-                    component:()=> import('@/components/LoginPage.vue'),
+                    component: () => import('@/components/LoginPage.vue'),
                 },
                 {
                     path:'/register',
                     name: 'wel-register',
-                    component:()=>import('@/components/RegisterPage.vue')
+                    component: () => import('@/components/RegisterPage.vue'),
                 },
                 {
                     path:'/forget',
                     name: 'wel-forget',
-                    component:()=>import('@/components/ForgetPage.vue')
+                    component: () => import('@/components/ForgetPage.vue'),
                 },
             ]
         },
@@ -35,19 +36,19 @@ const router = createRouter({
             children:[
                 {
                     path: 'home',
-                    component:()=>import('@/views/IndexMain/HomeView.vue'),
+                    component: () => import('@/views/IndexMain/HomeView.vue'),
                 },
                 {
                     path:'message',
-                    component:()=>import('@/views/IndexMain/MessageView.vue'),
+                    component: () => import('@/views/IndexMain/MessageView.vue'),
                 },
                 {
                     path: 'download',
-                    component:()=>import('@/views/IndexMain/DownloadView.vue'),
+                    component: () => import('@/views/IndexMain/DownloadView.vue'),
                 },
                 {
                     path: 'user/:id',
-                    component:()=>import('@/views/IndexMain/UserInfoView.vue')
+                    component: () => import('@/views/IndexMain/UserInfoView.vue'),
                 }
             ]
         }

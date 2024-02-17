@@ -30,7 +30,7 @@ public class MinecraftServiceImpl implements MinecraftService {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return null;
         }
         return statusResponse;
     }

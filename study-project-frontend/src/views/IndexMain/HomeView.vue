@@ -2,19 +2,11 @@
 import TitleCard from "@/components/TitleCard.vue";
 import NewsComponent from "@/components/NewsComponent.vue";
 import ServerInfo from "@/components/ServerInfo.vue";
-import {reactive, ref,toRef,computed} from "vue";
+import { ref,toRef} from "vue";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 import GotoDownload from "@/components/GotoDownload.vue";
 import {useUserStore} from "@/stores/userStore.js";
 import {getUserInfo, userSignIn} from "@/api/user.js";
-
-const serverInfo=reactive({
-  serverNowPlayerNum:5,
-  serverMaxPlayerNum:30,
-  serverStatus:1,
-})
-
-
 
 const store = useUserStore();
 const userinfo=toRef(store,'user')

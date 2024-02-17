@@ -1,12 +1,11 @@
 <script setup>
-import {computed,toRef} from "vue";
-import {storeToRefs} from "pinia";
+import {computed, toRef} from "vue";
 import {useUserStore} from "@/stores/userStore.js";
+import {useServerStore} from "@/stores/serverStore.js";
 
-const {serverInfo} = defineProps(['serverInfo'])
 
+//用户信息
 const store = useUserStore();
-
 const userinfo=toRef(store,'user')
 
 const getLevel=computed(() => {
@@ -21,15 +20,22 @@ const getNowExp=computed(()=>{
 const getNextExp=computed(()=>{
   return userinfo.value.nextExp - getNowTargetExp.value;
 })
-const serverPlayerNum = computed(() => {
-  let percentage = serverInfo.serverNowPlayerNum / serverInfo.serverMaxPlayerNum * 100;
-  return Number.parseFloat(percentage.toFixed(2))
-})
-
 const getExpPercent=computed(()=>{
   let percentage = getNowExp.value / getNextExp.value * 100;
   return percentage.valueOf();
 })
+
+//服务器信息
+const serverStore = useServerStore();
+serverStore.getServerInfo();
+const serverPlayer = toRef(serverStore,'players')
+const serverStatus=toRef(serverStore,'status')
+
+const getServerPlayerPercent=computed(()=>{
+  if (serverStatus) return 0
+  return serverPlayer.value.online / serverPlayer.value.max * 100
+})
+
 </script>
 
 <template>
@@ -41,11 +47,11 @@ const getExpPercent=computed(()=>{
               :duration="5"
               :indeterminate="true"
               :percentage="100"
-              :status="serverInfo.serverStatus===1?'success':'exception'"
+              :status="serverStatus===1?'success':'exception'"
               type="circle"
           />
-          <p :class="serverInfo.serverStatus===1?'server-status-online':'server-status-offline'">
-            {{ serverInfo.serverStatus === 1 ? '在线' : '离线' }}
+          <p :class="serverStatus===1?'server-status-online':'server-status-offline'">
+            {{ serverStatus===1 ? '在线' : '离线' }}
           </p>
 <!--          <el-button :type="serverInfo.serverStatus===1?'danger':'success'" @click="controlServe">-->
 <!--            {{ serverInfo.serverStatus === 1 ? '关闭' : '开启' }}-->
@@ -54,8 +60,8 @@ const getExpPercent=computed(()=>{
         </el-col>
         <!--服务器玩家数量-->
         <el-col :span="8" class="server-player">
-          <el-progress :percentage="serverPlayerNum" type="circle"/>
-          <p>{{ serverInfo.serverNowPlayerNum }} / {{ serverInfo.serverMaxPlayerNum }}</p>
+          <el-progress :percentage="getServerPlayerPercent" type="circle"/>
+          <p> {{serverPlayer.online}} / {{serverPlayer.max}} </p>
           <p>服务器当前玩家数量</p>
         </el-col>
         <!--玩家账户等级-->
