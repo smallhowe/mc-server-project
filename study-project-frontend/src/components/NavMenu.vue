@@ -44,9 +44,9 @@ const controlNav=()=>{
       <el-menu-item class="is-collapse" @click="controlNav">
         <el-icon><Expand v-show="isCollapse" /> <Fold v-show="!isCollapse" /></el-icon>
       </el-menu-item>
-        <el-menu-item class="user">
+        <el-menu-item v-if="userinfo!==null" class="user">
           <div class="avatar">
-            <el-avatar v-if="userinfo.avatarUrl" :src="userinfo.avatarUrl"/>
+            <el-avatar :src="userinfo.avatarUrl"/>
           </div>
           <div class="username">
             <span>{{userinfo.username}}</span>

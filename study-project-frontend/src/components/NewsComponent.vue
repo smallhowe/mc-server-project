@@ -1,6 +1,28 @@
 <script setup>
-import {inject,onMounted} from "vue";
+import {getNewsList} from "@/api/news.js";
+import {ref} from "vue";
 
+const newsList = ref([])
+const total=ref(0)
+const pageSize=ref(1)
+const currentPage=ref(1)
+const getNews=async ()=>{
+  const {data}=await getNewsList(currentPage.value)
+  ElMessage.closeAll()
+  if (data.status!==200)return
+  newsList.value=data.data.records
+  total.value=data.data.pages
+  pageSize.value=data.data.size
+}
+getNews()
+const getMonthAndDay=(dateTime)=>{
+  const date=new Date(dateTime)
+  let month=date.getMonth()+1
+  month=String(month).padStart(2,'0')
+  let day=date.getDate()
+  day=String(day).padStart(2,'0')
+  return month + '-' + day;
+}
 </script>
 
 <template>
@@ -11,11 +33,17 @@ import {inject,onMounted} from "vue";
           <span>公告</span>
         </div>
       </template>
-      <div v-for="o in 4" :key="o" class="news-item">
-        <span class="news-date">09-12</span>
-        <span class="news-title">{{ '全新的新闻 - ' + o }}</span>
+      <div v-for="item in newsList" :key="item.id" class="news-item">
+        <span class="news-date">{{getMonthAndDay(item.createTime)}}</span>
+        <span class="news-title">{{ item.title }}</span>
       </div>
-      <template #footer><el-pagination :default-page-size="8" background layout="prev, pager, next" :total="8" /></template>
+      <template #footer><el-pagination :default-page-size="pageSize"
+                                       background layout="prev, pager, next"
+                                       @current-change="getNews"
+                                       :total="total"
+                                       v-model:current-page="currentPage"
+      />
+      </template>
     </el-card>
   </div>
 </template>

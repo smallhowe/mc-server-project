@@ -1,6 +1,8 @@
 <script setup>
 import NavMenu from "@/components/NavMenu.vue";
+import {ref} from "vue";
 
+const cachedComponents=ref(['HomeView','DownloadView'])
 </script>
 
 <template>
@@ -8,11 +10,15 @@ import NavMenu from "@/components/NavMenu.vue";
     <NavMenu></NavMenu>
     <div class="index-bg">
       <el-scrollbar class="index-main">
-        <router-view v-slot="{Component}">
-          <transition name="el-fade-in">
-            <component v-show="true" :is="Component"/>
-          </transition>
+
+          <router-view v-slot="{Component}">
+            <transition name="el-fade-in">
+              <keep-alive :include="cachedComponents">
+                <component v-show="true" :is="Component"/>
+              </keep-alive>
+            </transition>
         </router-view>
+
       </el-scrollbar>
     </div>
   </div>
