@@ -15,7 +15,10 @@ const loading=ref(false)
 const isSignIn=ref(false)
 
 const signInBtnMsg=()=>{
-  if (Date.now()<localStorage.getItem('signIn')){
+  let signObj=JSON.parse(localStorage.getItem('signIn'))||{}
+  console.log(signObj)
+  let isSign=(Date.now()<signObj.time) && (userinfo.value.id===signObj.id)
+  if (isSign){
     isSignIn.value=true
     return "今日已签到"
   }
@@ -30,7 +33,11 @@ const signIn = () => {
   loading.value = true
   userSignIn().then(async res => {
     const {data} = res
-    localStorage.setItem("signIn",data.data.nextDate)
+    let signObj=JSON.stringify({
+          time:data.data.nextDate,
+          id:userinfo.value.id
+    })
+    localStorage.setItem("signIn",signObj)
     if (data.status !== 200) {
       isSignIn.value=true
       return
@@ -59,7 +66,7 @@ const signIn = () => {
       <!-- 主页左侧内容 -->
       <el-col class="left" :span="24" :md="16">
         <!-- 服务器信息 -->
-        <ServerInfo :server-info="serverInfo"></ServerInfo>
+        <ServerInfo></ServerInfo>
         <CarouselComponent></CarouselComponent>
       </el-col>
 

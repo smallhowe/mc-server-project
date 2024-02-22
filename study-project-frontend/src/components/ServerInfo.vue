@@ -15,6 +15,7 @@ const getNowTargetExp=computed(()=>{
   return userinfo.value.levelList.find(item => item.level === userinfo.value.level).exp;
 })
 const getNowExp=computed(()=>{
+  if (!userinfo.value.exp) return 0;
   return userinfo.value.exp - getNowTargetExp.value;
 })
 const getNextExp=computed(()=>{
@@ -32,8 +33,9 @@ const serverPlayer = toRef(serverStore,'players')
 const serverStatus=toRef(serverStore,'status')
 
 const getServerPlayerPercent=computed(()=>{
-  if (serverStatus) return 0
-  return serverPlayer.value.online / serverPlayer.value.max * 100
+  if (!serverStatus.value) return 0
+  let percentage = serverPlayer.value.online / serverPlayer.value.max * 100
+  return Number.parseFloat(percentage.toFixed(2))
 })
 
 </script>

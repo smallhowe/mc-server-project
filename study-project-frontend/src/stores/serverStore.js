@@ -18,7 +18,7 @@ export const useServerStore = defineStore('server',()=>{
     async function getServerInfo(){
         const res=await getServerInfoRequest()
         ElMessage.closeAll();
-        console.log(res)
+        // console.log(res)
         if (res.data.status!==200) return;
         players.value=res.data.data.players
         version.value=res.data.data.version

@@ -8,7 +8,7 @@ import {ElMessage} from "element-plus"
 const store = useUserStore();
 getUserInfo().then(res=>{
   if (res.data.status===200){
-    console.log(res.data.data)
+    // console.log(res.data.data)
     store.user=res.data.data
     router.replace("/index")
   }else{
@@ -23,4 +23,7 @@ getUserInfo().then(res=>{
 </template>
 
 <style lang="less">
+//.el-tabs__item.is-top{
+//  background-color: white;
+//}
 </style>

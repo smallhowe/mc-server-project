@@ -3,8 +3,12 @@ import { ref,toRef } from 'vue'
 import {useUserStore} from "@/stores/userStore.js";
 import {getLogOut} from "@/api/login.js";
 import router from "@/router/index.js";
+import {useRoute} from "vue-router";
 
 const store=useUserStore()
+
+const route = useRoute();
+const activeNav=toRef(route,'path')
 
 const userinfo = toRef(store,'user')
 
@@ -12,8 +16,9 @@ const isCollapse = ref(true)
 const groupImgLoading=ref(true)
 const logout=async ()=>{
   await getLogOut().then(()=>{
-    store.user = null;
+    userinfo.value=null
     router.replace("/login")
+    // location.reload()
   })
 }
 
@@ -36,12 +41,12 @@ const controlNav=()=>{
 <template>
   <div class="nav-menu">
     <el-menu
-        default-active="/index/home"
+        v-model:default-active="activeNav"
         class="el-menu-vertical-demo"
         :router="true"
         :collapse="isCollapse"
     >
-      <el-menu-item class="is-collapse" @click="controlNav">
+        <el-menu-item class="is-collapse" @click="controlNav">
         <el-icon><Expand v-show="isCollapse" /> <Fold v-show="!isCollapse" /></el-icon>
       </el-menu-item>
         <el-menu-item v-if="userinfo!==null" class="user">
@@ -52,11 +57,11 @@ const controlNav=()=>{
             <span>{{userinfo.username}}</span>
           </div>
         </el-menu-item>
-        <el-menu-item route="/index/home" index="/index/home">
+        <el-menu-item index="/index/home">
           <el-icon><House /></el-icon>
           <template #title>首页</template>
         </el-menu-item>
-        <el-menu-item route="/index/message" index="/index/message">
+        <el-menu-item index="/index/message">
           <el-icon><Message /></el-icon>
           <template #title>消息</template>
         </el-menu-item>
@@ -97,7 +102,7 @@ const controlNav=()=>{
           <el-icon><setting /></el-icon>
           <span>设置</span>
         </template>
-        <el-menu-item index="/index/user/1">
+        <el-menu-item index="/index/user">
           <el-icon><User /></el-icon>
           <span>账户信息</span>
         </el-menu-item>
@@ -147,9 +152,26 @@ const controlNav=()=>{
     justify-content: center;
     align-items: center;
     user-select: none;
+    transition: transform .1s ease-in;
+    position: relative;
+    &:hover{
+      transform: scale(1.1);
+      &::before{
+        content: "更换头像";
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 8px;
+        color: white;
+        background-color: rgba(40, 40, 40, 0.5);
+        border-radius: 50%;
+        inset: 0;
+      }
+    }
   }
   .username{
-    margin-top: 15px;
+    margin-top: 10px;
     line-height: normal;
     position: relative;
     .el-icon{
@@ -165,7 +187,7 @@ const controlNav=()=>{
   }
 }
 .user-active{
-  height: 90px;
+  height: 80px;
 }
 .join-group{
   width: 100px;
