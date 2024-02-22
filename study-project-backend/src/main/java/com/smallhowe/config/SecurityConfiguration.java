@@ -37,7 +37,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(request -> {
                     // 针对HTTP请求进行授权规则设置
-                    request.requestMatchers("/api/auth/**","/resource/download/**","/img/**")
+                    request.requestMatchers("/api/auth/**","/img/**")
                             .permitAll()
                             .anyRequest()
                             .authenticated();
@@ -108,7 +108,7 @@ public class SecurityConfiguration {
     }
 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type","application/json;charset=UTF-8");
         ObjectMapper om = new ObjectMapper();
         String result = om.writeValueAsString(RestBean.success("登录成功"));
         response.getWriter().write(result);
@@ -116,7 +116,7 @@ public class SecurityConfiguration {
     }
 
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type","application/json;charset=UTF-8");
         ObjectMapper om = new ObjectMapper();
         String result = om.writeValueAsString(RestBean.failure(401, exception.getMessage()));
         response.getWriter().write(result);
@@ -124,7 +124,7 @@ public class SecurityConfiguration {
     }
 
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type","application/json;charset=UTF-8");
         ObjectMapper om = new ObjectMapper();
         String result = om.writeValueAsString(RestBean.success("退出成功"));
         response.getWriter().write(result);
@@ -132,7 +132,7 @@ public class SecurityConfiguration {
     }
 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type","application/json;charset=UTF-8");
         ObjectMapper om = new ObjectMapper();
         String result = om.writeValueAsString(RestBean.failure(401, "未登录"));
         response.getWriter().write(result);

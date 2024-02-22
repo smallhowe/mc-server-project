@@ -31,6 +31,6 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizeInterceptor)
-                .addPathPatterns("/**").excludePathPatterns("/api/auth/**","/img/**","/resource/download/**");
+                .addPathPatterns("/**").excludePathPatterns("/api/auth/**","/img/**");
     }
 }

@@ -18,7 +18,7 @@ public class MinecraftServiceImpl implements MinecraftService {
     @Override
     public StatusResponse getServerStatus() {
         ServerListPing ping = new ServerListPing();
-        ping.setAddress(new InetSocketAddress("127.0.0.1", 25565));
+        ping.setAddress(new InetSocketAddress("59x-11.mcstory.cc", 29492));
         StatusResponse statusResponse;
         try {
             statusResponse = ping.fetchData();

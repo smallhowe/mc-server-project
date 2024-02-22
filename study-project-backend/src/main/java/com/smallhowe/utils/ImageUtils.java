@@ -16,7 +16,6 @@ public class ImageUtils {
     private String port;
     //支持传入的图片类型
 
-
     /**
      * @param img 图片文件
      * @param savePath 保存路径
@@ -32,6 +31,17 @@ public class ImageUtils {
         map.put("url", avatarUrl);
         map.put("path", savePath + newImgName);
 
+        return map;
+    }
+
+    public Map<String,String> saveImgToImages(MultipartFile img)  {
+        String savePath = System.getProperty("user.dir") + "\\study-project-backend\\src\\main\\resources\\static\\images\\";
+        savePath = savePath.replace("\\", "/");
+        String newImgName = saveImage(img, savePath);
+        String imgUrl="http://" + address + ":" + port + "/img/" + newImgName;
+        Map<String, String> map = new HashMap<>();
+        map.put("url", imgUrl);
+        map.put("path", savePath + newImgName);
         return map;
     }
 
@@ -73,6 +83,7 @@ public class ImageUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
         return newImgName;
     }
 
