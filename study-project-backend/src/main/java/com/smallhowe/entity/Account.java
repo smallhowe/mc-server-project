@@ -54,6 +54,8 @@ public class Account implements Serializable {
 
     private String avatarPath;
 
+    private String gameId;
+
     private LocalDateTime createTime;
 
 }

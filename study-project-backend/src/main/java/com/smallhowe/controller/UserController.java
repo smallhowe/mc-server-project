@@ -6,6 +6,8 @@ import com.smallhowe.entity.RestBean;
 import com.smallhowe.service.UserService;
 import com.smallhowe.service.impl.SignInServiceImpl;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+    private final String MC_ID_REGEX = "^[a-zA-Z_]+$";
     @Resource
     private UserService userService;
     @GetMapping("/me")
@@ -76,6 +79,27 @@ public class UserController {
             case 1 -> RestBean.success("上传成功");
             default -> RestBean.failure(400, "未知错误");
         };
+    }
+
+    //绑定游戏ID
+    @PostMapping("/bind")
+    public RestBean<String> bindGameId(@SessionAttribute("account") Account account,@Pattern(regexp = MC_ID_REGEX) String gameId){
+        int flag=userService.bindGameId(account, gameId);
+        return flag>0?RestBean.success("绑定成功"):RestBean.failure(400,"绑定失败");
+    }
+
+    public RestBean<String> updatePassword(@SessionAttribute("account") Account account,
+                                           @Length(min = 6,max = 16) String oldPassword,
+                                           @Length(min = 6,max = 16) String newPassword) {
+        if(!account.getPassword().equals(oldPassword)){
+            return RestBean.failure(400,"旧密码错误");
+        }
+        if(newPassword.equals(oldPassword)){
+            return RestBean.failure(400,"新密码不能与旧密码相同");
+        }
+        account.setPassword(newPassword);
+        int flag = userService.updatePassword(account);
+        return flag>0?RestBean.success("修改成功"):RestBean.failure(400,"修改失败");
     }
 
 
