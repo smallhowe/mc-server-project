@@ -6,13 +6,19 @@ const newsList = ref([])
 const total=ref(0)
 const pageSize=ref(1)
 const currentPage=ref(1)
+const loading=ref(false)
 const getNews=async ()=>{
+  loading.value=true
   const {data}=await getNewsList(currentPage.value)
   ElMessage.closeAll()
-  if (data.status!==200)return
+  if (data.status!==200){
+    loading.value=false
+    return
+  }
   newsList.value=data.data.records
   total.value=data.data.pages
   pageSize.value=data.data.size
+  loading.value=false
 }
 getNews()
 const getMonthAndDay=(dateTime)=>{
@@ -27,15 +33,17 @@ const getMonthAndDay=(dateTime)=>{
 
 <template>
   <div class="news">
-    <el-card class="news-box-card">
+    <el-card class="news-box-card" v-loading="loading">
       <template #header>
         <div class="news-card-header">
           <span>公告</span>
         </div>
       </template>
-      <div v-for="item in newsList" :key="item.id" class="news-item">
-        <span class="news-date">{{getMonthAndDay(item.createTime)}}</span>
-        <span class="news-title">{{ item.title }}</span>
+      <div class="content">
+        <div v-for="item in newsList" :key="item.id" class="news-item">
+          <span class="news-date">{{getMonthAndDay(item.createTime)}}</span>
+          <span class="news-title">{{ item.title }}</span>
+        </div>
       </div>
       <template #footer><el-pagination :default-page-size="pageSize"
                                        background layout="prev, pager, next"
@@ -51,6 +59,10 @@ const getMonthAndDay=(dateTime)=>{
 <style scoped lang="less">
 .el-pagination{
   justify-content: flex-end;
+}
+.content{
+
+  height: 285px;
 }
 .news-item{
   display: flex;

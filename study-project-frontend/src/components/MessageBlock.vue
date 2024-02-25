@@ -44,7 +44,6 @@ const formatDate=(date)=>{
   padding: 15px;
   border-radius: 5px;
   width: 100%;
-  height: 100%;
   transition: background-color 0.2s ease-in;
   margin-bottom: 20px;
 }

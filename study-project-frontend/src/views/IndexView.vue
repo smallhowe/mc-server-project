@@ -11,13 +11,11 @@ const cachedComponents=ref(['HomeView','DownloadView'])
     <div class="index-bg">
       <el-scrollbar class="index-main">
           <router-view v-slot="{Component}">
-            <div class="router-wrapper">
-            <transition name="el-fade-in">
+            <transition name="el-fade-in" mode="out-in">
               <keep-alive :include="cachedComponents">
                 <component :is="Component"/>
               </keep-alive>
             </transition>
-            </div>
           </router-view>
 
       </el-scrollbar>
@@ -44,13 +42,9 @@ const cachedComponents=ref(['HomeView','DownloadView'])
   color: #181818;
   padding: 0 20px 0;
   box-sizing: border-box;
+  overflow-y: hidden;
   div:first-child{
     margin-top: 20px;
   }
-}
-.router-wrapper{
-  width: 100%;
-  height: calc(100vh - 20px); //-40px取决于.index-main的padding上下距离总计
-  overflow-y: hidden;
 }
 </style>

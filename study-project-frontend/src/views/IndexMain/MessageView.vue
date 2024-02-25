@@ -42,8 +42,12 @@ const removeTab=(targetName)=>{
 let toggleTime=0
 const changeTab=(targetName)=>{
   clearTimeout(toggleTime)
+
   activeTab.value='-1'
-  toggleTime = setTimeout(()=>activeTab.value=targetName,200)
+  toggleTime=setTimeout(()=>{
+    activeTab.value=targetName
+  },200)
+
 }
 
 </script>
@@ -53,16 +57,16 @@ const changeTab=(targetName)=>{
     <TitleCard title="消息中心" icon="el-icon-message" />
     <el-card class="msg-box">
       <el-tabs
-          v-model="activeTab"
+          :active-name="activeTab"
           type="card"
           class="demo-tabs"
           @tab-remove="removeTab"
           @tab-change="changeTab"
-      >
 
+      >
+        <el-scrollbar class="scroll">
         <transition name="el-zoom-in-top">
           <el-tab-pane name="0" label="主页">
-            <el-scrollbar class="scroll">
               <MessageBlock></MessageBlock>
               <MessageBlock></MessageBlock>
               <MessageBlock></MessageBlock>
@@ -72,7 +76,6 @@ const changeTab=(targetName)=>{
               <MessageBlock></MessageBlock>
               <MessageBlock></MessageBlock>
               <MessageBlock></MessageBlock>
-            </el-scrollbar>
         </el-tab-pane>
         </transition>
         <transition-group name="el-fade-in">
@@ -86,6 +89,7 @@ const changeTab=(targetName)=>{
             {{ item.content }}
           </el-tab-pane>
         </transition-group>
+        </el-scrollbar>
       </el-tabs>
     </el-card>
   </div>
@@ -106,12 +110,12 @@ const changeTab=(targetName)=>{
   height: 100%;
 }
 .scroll{
-  height: 700px;
+  height: 685px;
   padding-bottom: 40px;
 }
 .el-tab-pane{
   padding: 15px 0;
- height: 700px;
+ height: 685px;
 }
 
 </style>
