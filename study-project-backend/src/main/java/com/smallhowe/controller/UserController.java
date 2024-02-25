@@ -3,16 +3,28 @@ package com.smallhowe.controller;
 import com.smallhowe.entity.Account;
 import com.smallhowe.entity.Levels;
 import com.smallhowe.entity.RestBean;
+import com.smallhowe.service.AccountService;
 import com.smallhowe.service.UserService;
 import com.smallhowe.service.impl.SignInServiceImpl;
 import jakarta.annotation.Resource;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -25,6 +37,8 @@ public class UserController {
     private final String MC_ID_REGEX = "^[a-zA-Z0-9_]+$";
     @Resource
     private UserService userService;
+    @Resource
+    private BCryptPasswordEncoder passwordEncoder;
     @GetMapping("/me")
     public RestBean<Object> me(@SessionAttribute("account") Account account){
         account.setPassword(null);
@@ -92,18 +106,27 @@ public class UserController {
         return flag>0?RestBean.success("绑定成功"):RestBean.failure(400,"绑定失败");
     }
 
+
+    @PostMapping("/re-password")
     public RestBean<String> updatePassword(@SessionAttribute("account") Account account,
-                                           @Length(min = 6,max = 16) String oldPassword,
-                                           @Length(min = 6,max = 16) String newPassword) {
-        if(!account.getPassword().equals(oldPassword)){
-            return RestBean.failure(400,"旧密码错误");
+                                           @Length(min = 6, max = 16) String oldPassword,
+                                           @Length(min = 6, max = 16) String newPassword) throws ServletException, IOException {
+
+        if (!passwordEncoder.matches(oldPassword, account.getPassword())) {
+            return RestBean.failure(400, "旧密码错误");
         }
-        if(newPassword.equals(oldPassword)){
-            return RestBean.failure(400,"新密码不能与旧密码相同");
+        if (newPassword.equals(oldPassword)) {
+            return RestBean.failure(400, "新密码不能与旧密码相同");
         }
-        account.setPassword(newPassword);
+        account.setPassword(passwordEncoder.encode(newPassword));
         int flag = userService.updatePassword(account);
-        return flag>0?RestBean.success("修改成功"):RestBean.failure(400,"修改失败");
+        if (flag > 0) {
+            return RestBean.success("修改成功");
+        } else {
+            return RestBean.failure(400, "修改失败");
+        }
+
+
     }
 
 

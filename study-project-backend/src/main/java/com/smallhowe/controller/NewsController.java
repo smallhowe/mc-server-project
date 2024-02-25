@@ -6,6 +6,7 @@ import com.smallhowe.entity.News;
 import com.smallhowe.entity.RestBean;
 import com.smallhowe.service.NewsService;
 import jakarta.annotation.Resource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,8 +25,9 @@ public class NewsController {
     @Resource
     private NewsService newsService;
 
+
     @GetMapping("/list")
-    public RestBean<Object> getNewsList(Long current){
+    public RestBean<Object> getNewsList(Long current) {
         Page<News> page = new Page<>(current, 8);
         IPage<News> newsList = newsService.getNewsList(page);
         if (newsList.getTotal() == 0) return RestBean.failure(400,"当前没有公告");

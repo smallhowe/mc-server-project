@@ -3,6 +3,7 @@ package com.smallhowe.config;
 import com.smallhowe.interceptor.AuthorizeInterceptor;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

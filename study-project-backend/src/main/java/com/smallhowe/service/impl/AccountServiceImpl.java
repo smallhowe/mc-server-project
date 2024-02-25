@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -235,4 +236,5 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(password);
         return mapper.update(account, lqw) > 0;
     }
+
 }

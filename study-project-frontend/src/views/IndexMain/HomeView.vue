@@ -16,7 +16,6 @@ const isSignIn=ref(false)
 
 const signInBtnMsg=()=>{
   let signObj=JSON.parse(localStorage.getItem('signIn'))||{}
-  console.log(signObj)
   let isSign=(Date.now()<signObj.time) && (userinfo.value.id===signObj.id)
   if (isSign){
     isSignIn.value=true

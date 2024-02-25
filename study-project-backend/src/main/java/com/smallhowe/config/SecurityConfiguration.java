@@ -55,6 +55,10 @@ public class SecurityConfiguration {
                             .invalidateHttpSession(true)
                             .clearAuthentication(true);
                 })
+                .sessionManagement(s->{
+                    s.maximumSessions(1)
+                            .maxSessionsPreventsLogin(true);
+                })
                 .rememberMe(r -> {
                     r
                             .rememberMeParameter("remember")
@@ -121,7 +125,6 @@ public class SecurityConfiguration {
         ObjectMapper om = new ObjectMapper();
         String result = om.writeValueAsString(RestBean.failure(401, exception.getMessage()));
         response.getWriter().write(result);
-
     }
 
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {

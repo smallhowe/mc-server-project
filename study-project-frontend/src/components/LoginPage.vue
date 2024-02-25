@@ -5,6 +5,7 @@ import {ref} from "vue";
 import {postLogin} from "@/api/login.js";
 import {getUserInfo} from "@/api/user.js";
 import {useUserStore} from "@/stores/userStore.js";
+import {ElMessage} from "element-plus";
 
 const store = useUserStore();
 
@@ -38,11 +39,16 @@ const login = async ()=>{
     }
   }catch (err){
     console.error("发起登录请求出错:",err)
+    ElMessage({
+      message: "发起登录请求出错",
+      type: "error",
+    })
     loading.close()
     return
   }
   loading.close()
 
+  console.log("登录成功,获取用户信息中")
   await getUserInfo().then(res=>{
     if (res.data.status === 200){
       store.user=res.data.data

@@ -1,6 +1,7 @@
 package com.smallhowe.service;
 
 import com.smallhowe.entity.Account;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {

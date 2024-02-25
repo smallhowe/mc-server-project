@@ -7,7 +7,10 @@ import com.smallhowe.service.SignInService;
 import com.smallhowe.service.UserService;
 import com.smallhowe.utils.ImageUtils;
 import jakarta.annotation.Resource;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
@@ -90,7 +93,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updatePassword(Account account) {
-
         return accountMapper.updateById(account);
     }
 

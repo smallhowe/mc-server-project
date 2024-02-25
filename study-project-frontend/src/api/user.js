@@ -17,3 +17,11 @@ export function postUserUploadAvatar(data){
     config.headers["Content-Type"]="multipart/form-data"
     return request.post('/api/user/uploadAvatar',data,config)
 }
+
+export function postBindUserGameId(gameId){
+    return request.post('/api/user/bind',{gameId},config)
+}
+
+export function postResetPassword(oldPassword,newPassword){
+    return request.post('/api/user/re-password',{oldPassword,newPassword},config)
+}

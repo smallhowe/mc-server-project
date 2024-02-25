@@ -3,7 +3,9 @@ package com.smallhowe;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 
+import com.smallhowe.entity.Account;
 import com.smallhowe.entity.mc.StatusResponse;
+import com.smallhowe.mapper.AccountMapper;
 import com.smallhowe.mapper.SignInMapper;
 import com.smallhowe.utils.ServerListPing;
 import jakarta.annotation.Resource;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,15 +26,20 @@ class StudyProjectBackendApplicationTests {
     StringRedisTemplate template;
     @Resource
     SignInMapper signInMapper;
+    @Resource
+    AccountMapper accountMapper;
+    @Resource
+    BCryptPasswordEncoder passwordEncoder;
 
     private static final int MC_SERVER_PORT = 25565;
     @Test
     void contextLoads() throws IOException {
-        ServerListPing serverListPing = new ServerListPing();
-        InetSocketAddress address = new InetSocketAddress("127.0.0.1", MC_SERVER_PORT);
-        serverListPing.setAddress(address);
-        StatusResponse statusResponse = serverListPing.fetchData();
-        System.out.println(statusResponse);
+//        ServerListPing serverListPing = new ServerListPing();
+//        InetSocketAddress address = new InetSocketAddress("127.0.0.1", MC_SERVER_PORT);
+//        serverListPing.setAddress(address);
+//        StatusResponse statusResponse = serverListPing.fetchData();
+//        System.out.println(statusResponse);
+
 
     }
 
