@@ -22,7 +22,7 @@ import java.util.*;
 @Validated
 @RequestMapping("/api/user")
 public class UserController {
-    private final String MC_ID_REGEX = "^[a-zA-Z_]+$";
+    private final String MC_ID_REGEX = "^[a-zA-Z0-9_]+$";
     @Resource
     private UserService userService;
     @GetMapping("/me")
@@ -86,8 +86,8 @@ public class UserController {
 
     //绑定游戏ID
     @PostMapping("/bind")
-    public RestBean<String> bindGameId(@SessionAttribute("account") Account account,@Pattern(regexp = MC_ID_REGEX) @Length(min = 6,max = 12) @RequestParam String gameId){
-        System.out.println(gameId);
+    public RestBean<String> bindGameId(@SessionAttribute("account") Account account,
+                                       @Pattern(regexp = MC_ID_REGEX) @Length(min = 1,max = 16) @RequestParam String gameId){
         int flag=userService.bindGameId(account, gameId);
         return flag>0?RestBean.success("绑定成功"):RestBean.failure(400,"绑定失败");
     }
