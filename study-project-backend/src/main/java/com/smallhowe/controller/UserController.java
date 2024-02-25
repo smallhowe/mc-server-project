@@ -6,8 +6,10 @@ import com.smallhowe.entity.RestBean;
 import com.smallhowe.service.UserService;
 import com.smallhowe.service.impl.SignInServiceImpl;
 import jakarta.annotation.Resource;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +19,7 @@ import java.time.ZoneOffset;
 import java.util.*;
 
 @RestController
+@Validated
 @RequestMapping("/api/user")
 public class UserController {
     private final String MC_ID_REGEX = "^[a-zA-Z_]+$";
@@ -83,7 +86,8 @@ public class UserController {
 
     //绑定游戏ID
     @PostMapping("/bind")
-    public RestBean<String> bindGameId(@SessionAttribute("account") Account account,@Pattern(regexp = MC_ID_REGEX) String gameId){
+    public RestBean<String> bindGameId(@SessionAttribute("account") Account account,@Pattern(regexp = MC_ID_REGEX) @Length(min = 6,max = 12) @RequestParam String gameId){
+        System.out.println(gameId);
         int flag=userService.bindGameId(account, gameId);
         return flag>0?RestBean.success("绑定成功"):RestBean.failure(400,"绑定失败");
     }

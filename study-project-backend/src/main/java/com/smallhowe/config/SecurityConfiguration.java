@@ -82,6 +82,7 @@ public class SecurityConfiguration {
         jdbcTokenRepository.setCreateTableOnStartup(false);
         return jdbcTokenRepository;
     }
+
     private CorsConfiguration corsConfigurationSource(HttpServletRequest httpServletRequest) {
         CorsConfiguration cors = new CorsConfiguration();
         cors.addAllowedOriginPattern("*");
