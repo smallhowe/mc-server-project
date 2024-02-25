@@ -2,7 +2,7 @@
 import NavMenu from "@/components/NavMenu.vue";
 import {ref} from "vue";
 
-const cachedComponents=ref(['HomeView','DownloadView'])
+const cachedComponents=ref(['HomeView','DownloadView','MessageView'])
 </script>
 
 <template>
@@ -30,7 +30,6 @@ const cachedComponents=ref(['HomeView','DownloadView'])
   height: 100vh;
   position: relative;
   min-width: 685px;
-
 }
 .index-bg{
   background-image: url("http://localhost:8085/img/503454.jpg");

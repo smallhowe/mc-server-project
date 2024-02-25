@@ -1,31 +1,45 @@
 <script setup>
-import {ref} from "vue";
+import {ref,toRef} from "vue";
 import TitleCard from "@/components/TitleCard.vue";
 import MessageBlock from "@/components/MessageBlock.vue";
+import {useMsgStore} from "@/stores/msgStore.js";
 
-const msgList=ref([
-  {id:'1',title:'新的消息',content:'这是一条消息'},
-  {id:'2',title:'新的消息2',content:'这是一条消息'},
-  {id:'3',title:'新的消息3',content:'这是一条消息'},
-  {id:'4',title:'新的消息4',content:'这是一条消息'},
-  {id:'5',title:'新的消息5',content:'这是一条消息'},
-])
+const msgStore=useMsgStore()
+
+
+const current=ref(1)
+const addMsg=()=>{
+  if (current.value>=msgStore.totalPages) return
+  current.value++
+  msgStore.getMsgList(current.value)
+}
+const openMsgTab=ref(JSON.parse(localStorage.getItem('openMsgTab'))||[])
+const msgList=toRef(msgStore,'msgList')
+// const msgList=ref([
+//   {id:'1',title:'新的消息',content:'这是一条消息'},
+//   {id:'2',title:'新的消息2',content:'这是一条消息'},
+//   {id:'3',title:'新的消息3',content:'这是一条消息'},
+//   {id:'4',title:'新的消息4',content:'这是一条消息'},
+//   {id:'5',title:'新的消息5',content:'这是一条消息'},
+// ])
 
 const activeTab=ref('0')
 
 const addTab=(msg)=>{
-  let flag=msgList.value.some(item=>item.id===msg.id)
+  let flag=openMsgTab.value.some(item=>item.id===msg.id)
   if (flag){
     activeTab.value=msg.id
     return
   }
-  msgList.value.push(msg)
+  openMsgTab.value.push(msg)
+  localStorage.setItem('openMsgTab',JSON.stringify(openMsgTab.value))
+  activeTab.value=msg.id
 }
 const removeTab=(targetName)=>{
   if (activeTab.value===targetName){
-    msgList.value.forEach((item,index)=>{
+    openMsgTab.value.forEach((item,index)=>{
       if (item.id===targetName){
-        const nextTab = msgList.value[index + 1]|| msgList.value[index-1];
+        const nextTab = openMsgTab.value[index + 1]|| openMsgTab.value[index-1];
 
         if (nextTab) {
           activeTab.value = nextTab.id
@@ -36,7 +50,8 @@ const removeTab=(targetName)=>{
       }
     })
   }
-  msgList.value = msgList.value.filter(item => item.id !== targetName);
+  openMsgTab.value = openMsgTab.value.filter(item => item.id !== targetName);
+  localStorage.setItem('openMsgTab',JSON.stringify(openMsgTab.value))
 }
 
 let toggleTime=0
@@ -64,23 +79,22 @@ const changeTab=(targetName)=>{
           @tab-change="changeTab"
 
       >
-        <el-scrollbar class="scroll">
+
+        <div class="scroll">
         <transition name="el-zoom-in-top">
-          <el-tab-pane name="0" label="主页">
-              <MessageBlock></MessageBlock>
-              <MessageBlock></MessageBlock>
-              <MessageBlock></MessageBlock>
-              <MessageBlock></MessageBlock>
-              <MessageBlock></MessageBlock>
-              <MessageBlock></MessageBlock>
-              <MessageBlock></MessageBlock>
-              <MessageBlock></MessageBlock>
-              <MessageBlock></MessageBlock>
+          <el-tab-pane class="msg-home" v-infinite-scroll="addMsg" :infinite-scroll-distance="20" name="0" label="主页">
+              <MessageBlock v-if="msgList.length > 0" v-for="item in msgList" :key="item.id"
+                            :title="item.title"
+                            :content="item.content"
+                            :date="new Date(item.createTime)"
+                            @click="addTab(item)"
+              ></MessageBlock>
         </el-tab-pane>
+
         </transition>
         <transition-group name="el-fade-in">
           <el-tab-pane
-              v-for="(item,index) in msgList"
+              v-for="(item,index) in openMsgTab"
               :key="index"
               :label="item.title"
               :name="item.id"
@@ -89,7 +103,7 @@ const changeTab=(targetName)=>{
             {{ item.content }}
           </el-tab-pane>
         </transition-group>
-        </el-scrollbar>
+        </div>
       </el-tabs>
     </el-card>
   </div>
@@ -108,6 +122,13 @@ const changeTab=(targetName)=>{
   margin-top: 20px;
   width: 100%;
   height: 100%;
+}
+.msg-home{
+  overflow-y: auto;
+  &::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+  }
 }
 .scroll{
   height: 685px;
