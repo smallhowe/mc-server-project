@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
         //上传文件
         String filePath = System.getProperty("user.dir")+"\\study-project-backend\\src\\main\\resources\\static\\images\\user_avatar\\";
-        Map<String, String> imgSaveInfo = imageUtils.saveAvatar(avatar, filePath);
+        Map<String, String> imgSaveInfo = imageUtils.saveAvatar(avatar);
         System.out.println(imgSaveInfo.get("url"));
         System.out.println(imgSaveInfo.get("path"));
         if (imgSaveInfo.isEmpty()) return 0;

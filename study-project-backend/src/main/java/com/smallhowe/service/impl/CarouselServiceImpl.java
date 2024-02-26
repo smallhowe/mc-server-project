@@ -24,7 +24,7 @@ import java.util.Map;
  * @since 2024-02-10
  */
 @Service
-public class CarouselServiceImpl implements CarouselService {
+public class CarouselServiceImpl extends ServiceImpl<CarouselMapper, Carousel> implements CarouselService {
 
     @Resource
     private CarouselMapper carouselMapper;

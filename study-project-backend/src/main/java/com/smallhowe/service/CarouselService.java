@@ -15,7 +15,7 @@ import java.util.List;
  * @author smallhowe
  * @since 2024-02-10
  */
-public interface CarouselService {
+public interface CarouselService extends IService<Carousel> {
     RestBean<Object> addCarousel(String title,String content,MultipartFile img);
     List<Carousel> getCarouselList();
 }

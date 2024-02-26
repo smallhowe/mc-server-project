@@ -11,7 +11,7 @@ export const useMsgStore = defineStore('msgStore', () => {
     const getMsgList = async (current) => {
         const res = await getMessageListRequest(current)
         if (res.data.status!==200) return
-        console.log(res)
+        // console.log(res)
         msgList.value.push(...res.data.data.records)
         totalPages.value=res.data.data.pages
         msgTotal.value=res.data.data.total

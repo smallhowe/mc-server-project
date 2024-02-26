@@ -15,7 +15,7 @@ export function userSignIn(){
 
 export function postUserUploadAvatar(data){
     config.headers["Content-Type"]="multipart/form-data"
-    return request.post('/api/user/uploadAvatar',data,config)
+    return request.post('/api/user/upload/avatar',data,config)
 }
 
 export function postBindUserGameId(gameId){

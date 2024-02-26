@@ -4,6 +4,7 @@ import {useUserStore} from "@/stores/userStore.js";
 import {getLogOut} from "@/api/login.js";
 import router from "@/router/index.js";
 import {useRoute} from "vue-router";
+import UploadAvatar from "@/components/UploadAvatar.vue";
 
 const store=useUserStore()
 
@@ -14,6 +15,8 @@ const userinfo = toRef(store,'user')
 
 const isCollapse = ref(true)
 const groupImgLoading=ref(true)
+const openUpload=ref(false)
+
 const logout=async ()=>{
   await getLogOut().then(()=>{
     userinfo.value=null
@@ -50,8 +53,8 @@ const controlNav=()=>{
         <el-icon><Expand v-show="isCollapse" /> <Fold v-show="!isCollapse" /></el-icon>
       </el-menu-item>
         <el-menu-item v-if="userinfo!==null" class="user">
-          <div class="avatar">
-            <el-avatar :src="userinfo.avatarUrl"/>
+          <div class="avatar" @click="openUpload=true">
+            <el-avatar :src="userinfo.avatarUrl" />
           </div>
           <div class="username">
             <span>{{userinfo.username}}</span>
@@ -116,6 +119,7 @@ const controlNav=()=>{
       </el-menu-item>
     </el-menu>
 
+    <upload-avatar v-if="openUpload" v-model:show-dialog="openUpload"></upload-avatar>
   </div>
 </template>
 

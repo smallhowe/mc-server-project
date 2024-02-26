@@ -2,6 +2,7 @@ package com.smallhowe.config;
 
 import com.smallhowe.interceptor.AuthorizeInterceptor;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -11,13 +12,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
+    @Value("${my.image.path}")
+    private String imagePath;
+    @Value("${my.file.path}")
+    private String filePath;
     @Resource
     private AuthorizeInterceptor authorizeInterceptor;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/img/**").addResourceLocations("classpath:/static/images/");
-        registry.addResourceHandler("/resource/download/**").addResourceLocations("classpath:/static/download/");
+        if (imagePath.equals("default") || imagePath.isEmpty()) {
+            imagePath = System.getProperty("user.dir").replace("\\", "/") + "/static/images/";
+        }else if (!imagePath.substring(imagePath.length()-1).equals("/")) {
+            imagePath = imagePath + "/";
+        }
+
+        if (filePath.equals("default") || filePath.isEmpty()) {
+            filePath = System.getProperty("user.dir").replace("\\", "/") + "/static/images/";
+        }else if (!filePath.substring(filePath.length()-1).equals("/")) {
+            filePath = filePath + "/";
+        }
+
+        registry.addResourceHandler("/img/**").addResourceLocations("file:"+imagePath);
+        registry.addResourceHandler("/resource/download/**").addResourceLocations("file:"+filePath);
     }
 
     @Override

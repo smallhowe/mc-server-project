@@ -1,5 +1,6 @@
 package com.smallhowe.utils;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,22 +11,41 @@ import java.util.*;
 
 @Component
 public class ImageUtils {
-    @Value("${server.address}")
+    @Value("${my.address}")
     private String address;
     @Value("${server.port}")
     private String port;
+    @Value("${my.image.path}")
+    private String imagePath;
+    @Value("${my.file.path}")
+    private String filePath;
     //支持传入的图片类型
 
+
+    @PostConstruct
+    private void initPath(){
+        if (imagePath.equals("default") || imagePath.isEmpty()) {
+            imagePath = System.getProperty("user.dir").replace("\\", "/") + "/static/images/";
+        }else if (!imagePath.substring(imagePath.length()-1).equals("/")) {
+            imagePath = imagePath + "/";
+        }
+
+        if (filePath.equals("default") || filePath.isEmpty()) {
+            filePath = System.getProperty("user.dir").replace("\\", "/") + "/static/images/";
+        }else if (!filePath.substring(filePath.length()-1).equals("/")) {
+            filePath = filePath + "/";
+        }
+    }
     /**
      * @param img 图片文件
-     * @param savePath 保存路径
      * @return  Map：{url:头像地址,path:保存路径}
      */
-    public Map<String,String> saveAvatar(MultipartFile img, String savePath)  {
-        savePath = savePath.replace("\\", "/");
+
+    public Map<String,String> saveAvatar(MultipartFile img)  {
+        String savePath = imagePath.replace("\\", "/")+"/user_avatar/";
 
         String newImgName = saveImage(img, savePath);
-        String avatarUrl = "http://" + address + ":" + port + "/img/user_avatar/" + newImgName;
+        String avatarUrl =  address + ":" + port + "/img/user_avatar/" + newImgName;
 
         Map<String, String> map = new HashMap<>();
         map.put("url", avatarUrl);
@@ -35,10 +55,10 @@ public class ImageUtils {
     }
 
     public Map<String,String> saveImgToImages(MultipartFile img)  {
-        String savePath = System.getProperty("user.dir") + "\\study-project-backend\\src\\main\\resources\\static\\images\\";
+        String savePath = imagePath;
         savePath = savePath.replace("\\", "/");
         String newImgName = saveImage(img, savePath);
-        String imgUrl="http://" + address + ":" + port + "/img/" + newImgName;
+        String imgUrl= address + ":" + port + "/img/" + newImgName;
         Map<String, String> map = new HashMap<>();
         map.put("url", imgUrl);
         map.put("path", savePath + newImgName);

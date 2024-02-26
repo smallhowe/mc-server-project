@@ -1,6 +1,7 @@
 package com.smallhowe.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.smallhowe.entity.Account;
 import com.smallhowe.mapper.AccountMapper;
 import com.smallhowe.service.AccountService;
@@ -29,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2024-01-20
  */
 @Service
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends ServiceImpl<AccountMapper,Account> implements AccountService {
     @Resource
     private AccountMapper mapper;
     @Resource
