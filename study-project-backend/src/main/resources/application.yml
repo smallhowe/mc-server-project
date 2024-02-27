@@ -1,5 +1,5 @@
 my:
-  address: http://127.0.0.1  #如果您使用的是本地开发环境，请将此处修改为http://localhost。如果您使用的是服务器，请将此处修改为服务器的域名。
+  address: http://localhost  #如果您使用的是本地开发环境，请将此处修改为http://localhost。如果您使用的是服务器，请将此处修改为服务器的域名。
   update-image-url: true  #是否更新表中的图片地址（开启后启动可能会较慢）。
   image:
     #图片保存路径（仅支持相对路径）
@@ -24,6 +24,15 @@ spring:
     password: mfvrlpafndujdfia
     properties:
       from: smallhowe@qq.com
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactoryClass: javax.net.ssl.SSLSocketFactory
+        #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: true
   data:
     redis:
       database: 0
@@ -36,5 +45,8 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+  web:
+    resources:
+      static-locations: file:D:/static/ #网页存放路径
 mybatis-plus:
   mapper-locations: com/smallhowe/mapper/xml/*.xml

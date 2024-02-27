@@ -119,8 +119,8 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper,Account> imple
         message.setSubject("您的验证邮件");
         message.setText("验证码是：" + code);
         try {
-
             mailSender.send(message);
+            System.out.println("已发送出去");
             template.opsForValue().set(key, String.valueOf(code), 3, TimeUnit.MINUTES);
         } catch (MailException e) {
             e.printStackTrace();

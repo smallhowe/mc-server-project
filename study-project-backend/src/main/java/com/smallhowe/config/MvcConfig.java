@@ -16,6 +16,8 @@ public class MvcConfig implements WebMvcConfigurer {
     private String imagePath;
     @Value("${my.file.path}")
     private String filePath;
+    @Value("${spring.web.resources.static-locations}")
+    private String webPath;
     @Resource
     private AuthorizeInterceptor authorizeInterceptor;
 
@@ -26,13 +28,15 @@ public class MvcConfig implements WebMvcConfigurer {
         }else if (!imagePath.substring(imagePath.length()-1).equals("/")) {
             imagePath = imagePath + "/";
         }
-
         if (filePath.equals("default") || filePath.isEmpty()) {
-            filePath = System.getProperty("user.dir").replace("\\", "/") + "/static/images/";
+            filePath = System.getProperty("user.dir").replace("\\", "/") + "/static/download/";
         }else if (!filePath.substring(filePath.length()-1).equals("/")) {
             filePath = filePath + "/";
         }
 
+        System.out.println(webPath);
+        registry.addResourceHandler("/").addResourceLocations(webPath + "index.html");
+        registry.addResourceHandler("/assets/**").addResourceLocations(webPath + "assets/");
         registry.addResourceHandler("/img/**").addResourceLocations("file:"+imagePath);
         registry.addResourceHandler("/resource/download/**").addResourceLocations("file:"+filePath);
     }
@@ -49,6 +53,6 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorizeInterceptor)
-                .addPathPatterns("/**").excludePathPatterns("/api/auth/**","/img/**");
+                .addPathPatterns("/**").excludePathPatterns("/*","/assets/**","/api/auth/**","/img/**");
     }
 }

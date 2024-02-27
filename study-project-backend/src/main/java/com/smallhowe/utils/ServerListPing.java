@@ -134,7 +134,7 @@ public class ServerListPing {
         }
         long pingtime = dataInputStream.readLong(); //read response
 
-        System.out.println(json);
+//        System.out.println(json);
         om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         StatusResponse statusResponse = om.readValue(json, StatusResponse.class);
 

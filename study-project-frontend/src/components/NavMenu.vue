@@ -20,8 +20,8 @@ const openUpload=ref(false)
 const logout=async ()=>{
   await getLogOut().then(()=>{
     userinfo.value=null
-    router.replace("/login")
-    // location.reload()
+    // router.replace("/login")
+    location.reload()
   })
 }
 
@@ -81,11 +81,11 @@ const controlNav=()=>{
                       element-loading-text="加载中..."
                       element-loading-background="#000"
                       :class="{'el-img-loading':groupImgLoading}"
-                      src="http://localhost:8085/img/QQGroup-small.png"
+                      src="https://smallhowe.top/img/QQGroup-small.png"
                       loading="lazy"
                       :preview-teleported="true"
                       :hide-on-click-modal="true"
-                      :previewSrcList="['http://localhost:8085/img/QQGroup.jpg']"
+                      :previewSrcList="['https://smallhowe.top/img/QQGroup.jpg']"
                       @load="groupImgLoading=false"
             >
             </el-image>

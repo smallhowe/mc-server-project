@@ -32,7 +32,7 @@ const cachedComponents=ref(['HomeView','DownloadView','MessageView'])
   min-width: 685px;
 }
 .index-bg{
-  background-image: url("http://localhost:8085/img/503454.jpg");
+  background-image: url("https://smallhowe.top/img/503454.jpg");
   background-size: cover;
   flex: 1;
   box-sizing: border-box;

@@ -17,8 +17,6 @@ public class ImageUtils {
     private String port;
     @Value("${my.image.path}")
     private String imagePath;
-    @Value("${my.file.path}")
-    private String filePath;
     //支持传入的图片类型
 
 
@@ -30,11 +28,6 @@ public class ImageUtils {
             imagePath = imagePath + "/";
         }
 
-        if (filePath.equals("default") || filePath.isEmpty()) {
-            filePath = System.getProperty("user.dir").replace("\\", "/") + "/static/images/";
-        }else if (!filePath.substring(filePath.length()-1).equals("/")) {
-            filePath = filePath + "/";
-        }
     }
     /**
      * @param img 图片文件
@@ -42,7 +35,7 @@ public class ImageUtils {
      */
 
     public Map<String,String> saveAvatar(MultipartFile img)  {
-        String savePath = imagePath.replace("\\", "/")+"/user_avatar/";
+        String savePath = imagePath.replace("\\", "/")+"user_avatar/";
 
         String newImgName = saveImage(img, savePath);
         String avatarUrl =  address + ":" + port + "/img/user_avatar/" + newImgName;

@@ -37,7 +37,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests(request -> {
                     // 针对HTTP请求进行授权规则设置
-                    request.requestMatchers("/api/auth/**","/img/**")
+                    request.requestMatchers("/*","/assets/**","/api/auth/**","/img/**")
                             .permitAll()
                             .anyRequest()
                             .authenticated();
@@ -56,7 +56,7 @@ public class SecurityConfiguration {
                             .clearAuthentication(true);
                 })
                 .sessionManagement(s->{
-                    s.maximumSessions(1)
+                    s.maximumSessions(3)
                             .maxSessionsPreventsLogin(true);
                 })
                 .rememberMe(r -> {

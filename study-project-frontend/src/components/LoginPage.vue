@@ -48,7 +48,7 @@ const login = async ()=>{
   }
   loading.close()
 
-  console.log("登录成功,获取用户信息中")
+  // console.log("登录成功,获取用户信息中")
   await getUserInfo().then(res=>{
     if (res.data.status === 200){
       store.user=res.data.data
