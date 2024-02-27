@@ -6,15 +6,22 @@
   <el-container>
     <el-row>
       <el-col class="left" :md="16">
-        <el-image fit="cover" src="https://img.zcool.cn/community/014cdd5ce29993a801208f8b9dc378.jpg@2o.jpg"
+        <el-image fit="cover" src="https://smallhowe.top/img/login-bg.jpg"
                   style="height: 100%"></el-image>
+
+
       </el-col>
       <el-col  class="right" :md="8">
         <router-view v-slot="{Component}">
-          <transition name="el-fade-in">
-            <component v-show="true" :is="Component"/>
+          <transition name="el-fade-in" mode="out-in">
+            <component  :is="Component"/>
           </transition>
         </router-view>
+        <div class="ICP">
+          <el-link type="info" href="https://beian.miit.gov.cn/" target="_blank">
+            粤ICP备2023154423号
+          </el-link>
+        </div>
       </el-col>
     </el-row>
 
@@ -26,25 +33,31 @@
 .el-container {
   width: 100vw;
   height: 100vh;
+  min-width: 340px;
   .left {
     overflow: hidden;
     width: 100%;
     @media (max-width: 991px) {
     }
-    img {
-      width: 100%;
-      height: 100%;
-    }
+
   }
 
   .right {
-    overflow: hidden;
+    overflow: auto;
     background: white;
+    display: flex;
+    flex-direction: column;
     @media (max-width: 991px) {
       padding: 10px 0;
     }
-
   }
 }
-
+.el-row{
+  width: 100%;
+}
+.ICP{
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
 </style>

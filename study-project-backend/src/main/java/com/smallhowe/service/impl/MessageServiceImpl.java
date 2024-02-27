@@ -26,7 +26,9 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public IPage<Message> getMessageList(Account account, IPage<Message> page) {
         LambdaQueryWrapper<Message> lqw = new LambdaQueryWrapper<>();
-        lqw.eq(Message::getIsAll,1).or().eq(Message::getAccountId,account.getId());
+        lqw.eq(Message::getIsAll,1).or()
+                .eq(Message::getAccountId,account.getId())
+                .orderByDesc(Message::getId);
 
         return messageMapper.selectPage(page,lqw);
     }

@@ -1,7 +1,8 @@
 <script setup>
-import {ref,reactive} from "vue";
+import {ref,reactive,watch,nextTick} from "vue";
 import {postGetCode,postStartReset,postDoReset} from "@/api/reset-password.js";
 import router from "@/router/index.js";
+import {ElMessage} from "element-plus";
 
 const active = ref(0);
 
@@ -46,7 +47,10 @@ const onValidate=(prop,isValid)=> {
 /* 开始重置 */
 const getCode = async () => {
   sendingEmail.value = true;
-  const {data} = await postGetCode({email: form.value.email});
+  const {data} = await postGetCode({email: form.value.email}).catch(()=>{
+    sendingEmail.value=false
+    ElMessage.error("无法发送请求到服务器")
+  });
 
   if (data.status === 200){
     codeTime.value = 60;
@@ -100,7 +104,7 @@ const resetSuccess=()=>{
 }
 const resetFail=()=>{
   active.value = 2;
-  isStepEnd.value = false;
+  // isStepEnd.value = false;
 }
 const restart=()=>{
   location.reload();
@@ -126,26 +130,26 @@ const forgetForm=ref()
       </el-steps>
     </div>
     <div class="main">
-      <transition name="el-fade-in" mode="out-in">
+      <transition name="el-fade-in">
         <div v-if="active===0" class="forget">
-        <div class="forget-title">
-          <h1>忘记密码</h1>
-          <p>请输入需要重置密码的电子邮件地址</p>
-        </div>
-        <el-form :model="form" :rules="rules" ref="forgetForm" class="forget-form" @validate="onValidate">
-          <el-form-item prop="email">
-            <el-input v-model="form.email" prefix-icon="Message" placeholder="请输入邮箱" tabindex="1"></el-input>
-          </el-form-item>
-          <el-form-item prop="code">
-            <el-col :span="15" >
-              <el-input v-model="form.code" prefix-icon="EditPen" placeholder="请输入验证码" tabindex="6"></el-input>
-            </el-col>
-            <el-col :span="8" :offset="1">
-              <el-button type="success" :disabled="!isEmailValid || codeTime>0" :loading="sendingEmail" @click="getCode" tabindex="5">{{codeTime>0?codeTime+'秒后可重试':'获取验证码'}}</el-button>
-            </el-col>
-          </el-form-item>
-          <el-button plain  class="submit-btn"  tabindex="7" @click="startReset">重置</el-button>
-        </el-form>
+          <div class="forget-title">
+            <h1>忘记密码</h1>
+            <p>请输入需要重置密码的电子邮件地址</p>
+          </div>
+          <el-form :model="form" :rules="rules" ref="forgetForm" class="forget-form" @validate="onValidate">
+            <el-form-item prop="email">
+              <el-input v-model="form.email" prefix-icon="Message" placeholder="请输入邮箱" tabindex="1"></el-input>
+            </el-form-item>
+            <el-form-item prop="code">
+              <el-col :span="15" >
+                <el-input v-model="form.code" prefix-icon="EditPen" placeholder="请输入验证码" tabindex="6"></el-input>
+              </el-col>
+              <el-col :span="8" :offset="1">
+                <el-button type="success" :disabled="!isEmailValid || codeTime>0" :loading="sendingEmail" @click="getCode" tabindex="5">{{codeTime>0?codeTime+'秒后可重试':'获取验证码'}}</el-button>
+              </el-col>
+            </el-form-item>
+            <el-button plain type="primary"  class="submit-btn"  tabindex="7" @click="startReset">重置</el-button>
+          </el-form>
       </div>
       </transition>
       <transition name="el-fade-in" mode="out-in">
@@ -166,20 +170,7 @@ const forgetForm=ref()
         </div >
       </transition>
       <transition name="el-fade-in" mode="out-in">
-        <div v-if="active===3 && isStepEnd" class="forget">
-          <el-result
-              icon="success"
-              title="重置成功"
-          >
-            <template #sub-title>
-              <p>密码已重置成功，{{countdown.time}}秒后将自动跳转到登录页</p>
-            </template>
-            <template #extra>
-              <el-button type="primary" @click="goLogin">前往登录</el-button>
-            </template>
-          </el-result>
-        </div>
-        <div v-else>
+        <div v-if="active===2 && !isStepEnd">
           <el-result
               icon="error"
               title="重置失败"
@@ -194,6 +185,21 @@ const forgetForm=ref()
           </el-result>
         </div>
       </transition>
+      <transition name="el-fade-in" mode="out-in">
+        <div v-if="active===3 && isStepEnd" class="forget">
+          <el-result
+              icon="success"
+              title="重置成功"
+          >
+            <template #sub-title>
+              <p>密码已重置成功，{{countdown.time}}秒后将自动跳转到登录页</p>
+            </template>
+            <template #extra>
+              <el-button type="primary" @click="goLogin">前往登录</el-button>
+            </template>
+          </el-result>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -201,6 +207,8 @@ const forgetForm=ref()
 <style scoped lang="less">
 .container{
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .step{
   margin-top: 5vh;
@@ -210,13 +218,16 @@ const forgetForm=ref()
 }
 .main{
   height: 100%;
+  width: 100%;
+  margin-top: 15vh;
+  overflow: hidden;
+  box-sizing: border-box;
+  @media (max-width: 991px){
+    margin-top: 20px;
+  }
 }
 .forget{
-  padding-top: 15vh;
   height: 100%;
-  @media (max-width: 991px){
-  padding-top: 20px;
-  }
 }
 .forget-title {
   text-align: center;
@@ -242,7 +253,10 @@ const forgetForm=ref()
 }
 .submit-btn{
   margin-top: 50px;
-  width: 70%;
-
+  width: 100%;
+}
+.back-btn{
+  margin-top: 50px;
+  width: 100%;
 }
 </style>

@@ -97,6 +97,7 @@ const uploadAvatar=()=>{
              @update:modelValue="emit('update:showDialog',$event)"
              :append-to-body="true"
              destroy-on-close
+             title="上传头像"
              style="min-width: 468px"
   >
     <div class="upload-avatar">

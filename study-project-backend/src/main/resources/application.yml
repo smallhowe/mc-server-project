@@ -1,6 +1,6 @@
 my:
   address: http://localhost  #如果您使用的是本地开发环境，请将此处修改为http://localhost。如果您使用的是服务器，请将此处修改为服务器的域名。
-  update-image-url: true  #是否更新表中的图片地址（开启后启动可能会较慢）。
+  update-image-url: false  #是否更新表中的图片地址（开启后启动可能会较慢）。
   image:
     #图片保存路径（仅支持相对路径）
     #不填写路径或填写default则保存在当前工作目录下的static/images下

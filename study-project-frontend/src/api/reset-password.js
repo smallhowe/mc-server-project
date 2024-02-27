@@ -12,5 +12,5 @@ export function postStartReset(data){
     return request.post("/api/auth/start-reset",data,config)
 }
 export function postDoReset(password){
-    return request.post("/api/auth/do-reset",password,config)
+        return request.post("/api/auth/do-reset",password,config)
 }
