@@ -55,6 +55,9 @@ public class SecurityConfiguration {
                             .invalidateHttpSession(true)
                             .clearAuthentication(true);
                 })
+                .sessionManagement(s -> {
+                    s.maximumSessions(1);
+                })
                 .rememberMe(r -> {
                     r
                             .rememberMeParameter("remember")

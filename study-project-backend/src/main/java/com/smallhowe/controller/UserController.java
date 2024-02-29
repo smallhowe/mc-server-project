@@ -15,11 +15,14 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,6 +42,8 @@ public class UserController {
     private UserService userService;
     @Resource
     private BCryptPasswordEncoder passwordEncoder;
+    @Resource
+    private JdbcTokenRepositoryImpl tokenRepository;
     @GetMapping("/me")
     public RestBean<Object> me(@SessionAttribute("account") Account account){
         account.setPassword(null);
@@ -110,7 +115,8 @@ public class UserController {
     @PostMapping("/re-password")
     public RestBean<String> updatePassword(@SessionAttribute("account") Account account,
                                            @Length(min = 6, max = 16) String oldPassword,
-                                           @Length(min = 6, max = 16) String newPassword) throws ServletException, IOException {
+                                           @Length(min = 6, max = 16) String newPassword,
+                                           HttpSession session) throws ServletException, IOException {
 
         if (!passwordEncoder.matches(oldPassword, account.getPassword())) {
             return RestBean.failure(400, "旧密码错误");
@@ -121,6 +127,9 @@ public class UserController {
         account.setPassword(passwordEncoder.encode(newPassword));
         int flag = userService.updatePassword(account);
         if (flag > 0) {
+            tokenRepository.removeUserTokens(account.getUsername());
+            SecurityContextHolder.clearContext();
+            session.invalidate();
             return RestBean.success("修改成功");
         } else {
             return RestBean.failure(400, "修改失败");

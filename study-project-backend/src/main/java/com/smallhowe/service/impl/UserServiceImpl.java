@@ -7,6 +7,7 @@ import com.smallhowe.service.SignInService;
 import com.smallhowe.service.UserService;
 import com.smallhowe.utils.ImageUtils;
 import jakarta.annotation.Resource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
