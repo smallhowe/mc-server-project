@@ -41,8 +41,7 @@ const signIn = () => {
       isSignIn.value=true
       return
     }
-    let user = await getUserInfo()
-    store.user=user.data.data
+    await store.loadUserInfo()
   })
   loading.value = false
   signInBtnMsg()

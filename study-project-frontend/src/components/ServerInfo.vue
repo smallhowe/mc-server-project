@@ -9,7 +9,7 @@ const store = useUserStore();
 const userinfo=toRef(store,'user')
 
 const getLevel=computed(() => {
-  return userinfo.value.level
+  return userinfo.value.level;
 })
 const getNowTargetExp=computed(()=>{
   return userinfo.value.levelList.find(item => item.level === userinfo.value.level).exp;

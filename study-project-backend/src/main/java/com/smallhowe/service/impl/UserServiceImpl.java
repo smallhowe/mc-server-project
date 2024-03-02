@@ -8,11 +8,7 @@ import com.smallhowe.service.SignInService;
 import com.smallhowe.service.UserService;
 import com.smallhowe.utils.ImageUtils;
 import jakarta.annotation.Resource;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -42,8 +38,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public int uploadAvatar(MultipartFile avatar, Account account) {
 
-        //上传文件
-//        String filePath = System.getProperty("user.dir")+"\\study-project-backend\\src\\main\\resources\\static\\images\\user_avatar\\";
 
         if (!checkAvatarSize(avatar)) return -1;
 

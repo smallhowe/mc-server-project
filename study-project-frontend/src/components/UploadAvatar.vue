@@ -81,7 +81,7 @@ const uploadAvatar=()=>{
   cropper.value.getCropBlob(async (data)=>{
     let formData=new FormData()
     formData.append('avatar',data,'avatar.png')
-    const res=await postUserUploadAvatar(formData)
+    const res = await postUserUploadAvatar(formData)
     if (res.data.status===200){
       await userStore.loadUserInfo()  //刷新用户信息
       emit('update:showDialog',false) //关闭对话框

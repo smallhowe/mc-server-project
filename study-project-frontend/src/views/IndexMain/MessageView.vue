@@ -15,13 +15,6 @@ const addMsg=()=>{
 }
 const openMsgTab=ref(JSON.parse(localStorage.getItem('openMsgTab'))||[])
 const msgList=toRef(msgStore,'msgList')
-// const msgList=ref([
-//   {id:'1',title:'新的消息',content:'这是一条消息'},
-//   {id:'2',title:'新的消息2',content:'这是一条消息'},
-//   {id:'3',title:'新的消息3',content:'这是一条消息'},
-//   {id:'4',title:'新的消息4',content:'这是一条消息'},
-//   {id:'5',title:'新的消息5',content:'这是一条消息'},
-// ])
 
 const activeTab=ref('0')
 
