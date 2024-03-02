@@ -2,7 +2,6 @@
 import { ref,toRef } from 'vue'
 import {useUserStore} from "@/stores/userStore.js";
 import {getLogOut} from "@/api/login.js";
-import router from "@/router/index.js";
 import {useRoute} from "vue-router";
 import UploadAvatar from "@/components/UploadAvatar.vue";
 
@@ -50,7 +49,9 @@ const controlNav=()=>{
         :collapse="isCollapse"
     >
         <el-menu-item class="is-collapse" @click="controlNav">
-        <el-icon><Expand v-show="isCollapse" /> <Fold v-show="!isCollapse" /></el-icon>
+        <el-icon>
+          <Expand v-show="isCollapse" /> <Fold v-show="!isCollapse" />
+        </el-icon>
       </el-menu-item>
         <el-menu-item v-if="userinfo!==null" class="user">
           <div class="avatar" @click="openUpload=true">
@@ -68,7 +69,6 @@ const controlNav=()=>{
           <el-icon><Message /></el-icon>
           <template #title>消息</template>
         </el-menu-item>
-
       <el-tooltip :persistent="true" placement="right">
         <el-menu-item >
           <el-icon><ChatLineRound /></el-icon>
@@ -119,7 +119,9 @@ const controlNav=()=>{
       </el-menu-item>
     </el-menu>
 
-    <upload-avatar v-if="openUpload" v-model:show-dialog="openUpload"></upload-avatar>
+    <upload-avatar v-if="openUpload"
+                   v-model:show-dialog="openUpload">
+    </upload-avatar>
   </div>
 </template>
 

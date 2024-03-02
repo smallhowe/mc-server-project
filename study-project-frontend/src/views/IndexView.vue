@@ -3,7 +3,6 @@ import NavMenu from "@/components/NavMenu.vue";
 import {ref} from "vue";
 import {useMsgStore} from "@/stores/msgStore.js";
 const cachedComponents=ref(['HomeView','DownloadView','MessageView'])
-
 const msgStore = useMsgStore();
 msgStore.getMsgList(1)
 </script>

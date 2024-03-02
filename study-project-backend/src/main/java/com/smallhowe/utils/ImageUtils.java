@@ -38,6 +38,7 @@ public class ImageUtils {
         String savePath = imagePath.replace("\\", "/")+"user_avatar/";
 
         String newImgName = saveImage(img, savePath);
+        if(newImgName == null) return null;
         String avatarUrl =  address + ":" + port + "/img/user_avatar/" + newImgName;
 
         Map<String, String> map = new HashMap<>();
@@ -51,6 +52,7 @@ public class ImageUtils {
         String savePath = imagePath;
         savePath = savePath.replace("\\", "/");
         String newImgName = saveImage(img, savePath);
+        if (newImgName == null) return null;
         String imgUrl= address + ":" + port + "/img/" + newImgName;
         Map<String, String> map = new HashMap<>();
         map.put("url", imgUrl);
@@ -76,6 +78,8 @@ public class ImageUtils {
     private String saveImage(MultipartFile img, String savePath) {
         //获取图片后缀，为空则非支持的图片格式
         String imgSuffix = checkImageType(img);
+        if (imgSuffix == null) return null;
+
         String newImgName=null;
         //判断路径是否以/结尾
         if (savePath.endsWith("/")){

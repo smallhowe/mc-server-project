@@ -97,6 +97,7 @@ public class UserController {
         int flag = userService.uploadAvatar(avatar,account);
 
         return switch (flag) {
+            case -1 -> RestBean.failure(400, "头像像素过大");
             case 0 -> RestBean.failure(400, "上传失败");
             case 1 -> RestBean.success("上传成功");
             default -> RestBean.failure(400, "未知错误");
@@ -108,7 +109,13 @@ public class UserController {
     public RestBean<String> bindGameId(@SessionAttribute("account") Account account,
                                        @Pattern(regexp = MC_ID_REGEX) @Length(min = 1,max = 16) @RequestParam String gameId){
         int flag=userService.bindGameId(account, gameId);
-        return flag>0?RestBean.success("绑定成功"):RestBean.failure(400,"绑定失败");
+        return switch (flag) {
+            case -1 -> RestBean.failure(400, "请勿重复绑定相同的ID");
+            case -2 -> RestBean.failure(400, "当前用户ID已经被绑定");
+            case 0 -> RestBean.failure(400, "绑定失败");
+            case 1 -> RestBean.success("绑定成功");
+            default -> RestBean.failure(400, "未知错误");
+        };
     }
 
 

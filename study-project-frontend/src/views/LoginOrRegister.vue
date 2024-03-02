@@ -1,15 +1,11 @@
 <script setup>
-
 </script>
 
 <template>
   <el-container>
     <el-row>
       <el-col class="left" :md="16">
-        <el-image fit="cover" src="https://smallhowe.top/img/login-bg.jpg"
-                  style="height: 100%"></el-image>
-
-
+        <el-image fit="cover" src="https://smallhowe.top/img/login-bg.jpg" style="height: 100%"></el-image>
       </el-col>
       <el-col  class="right" :md="8">
         <router-view v-slot="{Component}">
@@ -24,8 +20,6 @@
         </div>
       </el-col>
     </el-row>
-
-
   </el-container>
 </template>
 
