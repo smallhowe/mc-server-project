@@ -5,7 +5,7 @@ import BigButton from "@/components/BigButton.vue";
 
 <template>
   <el-card class="download-block">
-    <a href="http://smallhowe.top/resource/download/Minecraft.7z">
+    <a href="https://www.smallhowe.top/resource/download/Minecraft客户端.7z">
       <BigButton top-bg-color="#00c6e7" bottom-bg-color="#00efcb">Minecraft客户端</BigButton>
     </a>
     <a href="https://www.oracle.com/cn/java/technologies/downloads/" target="_blank">

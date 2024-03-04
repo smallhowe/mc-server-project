@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import {getUserInfo} from "@/api/user.js";
+import {loadImageAsBase64} from "@/utils/ImgToBase64.js";
 
 export const useUserStore = defineStore('user', () => {
   const user = ref(null)
@@ -11,6 +12,9 @@ export const useUserStore = defineStore('user', () => {
       await getUserInfo().then(res=>{
         if (res.data.status===200){
           user.value=res.data.data
+          loadImageAsBase64(res.data.data.avatarUrl).then(img=>{
+            user.value.avatarUrl=img
+          })
           resolve()
         }else {
           //后端有响应，但是状态码不为200

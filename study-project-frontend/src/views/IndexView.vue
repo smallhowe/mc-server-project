@@ -33,7 +33,7 @@ msgStore.getMsgList(1)
   min-width: 685px;
 }
 .index-bg{
-  background-image: url("https://smallhowe.top/img/503454.jpg");
+  background-image: url("https://www.smallhowe.top/img/503454.jpg");
   background-size: cover;
   flex: 1;
   box-sizing: border-box;

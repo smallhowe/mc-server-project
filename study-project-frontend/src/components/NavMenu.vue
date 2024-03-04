@@ -4,6 +4,7 @@ import {useUserStore} from "@/stores/userStore.js";
 import {getLogOut} from "@/api/login.js";
 import {useRoute} from "vue-router";
 import UploadAvatar from "@/components/UploadAvatar.vue";
+import {loadImageAsBase64} from "@/utils/ImgToBase64.js";
 
 const store=useUserStore()
 
@@ -12,9 +13,23 @@ const activeNav=toRef(route,'path')
 
 const userinfo = toRef(store,'user')
 
+const groupImg=ref({
+  smallImg:'',
+  bigImages:["https://www.smallhowe.top/img/QQGroup.jpg"]
+})
+
+
 const isCollapse = ref(true)
-const groupImgLoading=ref(true)
+const groupImgLoading=ref(false)
 const openUpload=ref(false)
+const loadImg = () => {
+  if (groupImgLoading.value || groupImg.value.smallImg!=='') return
+  groupImgLoading.value=true
+  loadImageAsBase64("https://www.smallhowe.top/img/QQGroup-small.png").then(img => {
+    groupImg.value.smallImg = img
+    groupImgLoading.value=false
+  })
+}
 
 const logout=async ()=>{
   await getLogOut().then(()=>{
@@ -53,7 +68,7 @@ const controlNav=()=>{
           <Expand v-show="isCollapse" /> <Fold v-show="!isCollapse" />
         </el-icon>
       </el-menu-item>
-        <el-menu-item v-if="userinfo!==null" class="user">
+        <el-menu-item  class="user">
           <div class="avatar" @click="openUpload=true">
             <el-avatar :src="userinfo.avatarUrl" />
           </div>
@@ -70,7 +85,7 @@ const controlNav=()=>{
           <template #title>消息</template>
         </el-menu-item>
       <el-tooltip :persistent="true" placement="right">
-        <el-menu-item >
+        <el-menu-item @mouseenter="loadImg">
           <el-icon><ChatLineRound /></el-icon>
           <span>加入群聊</span>
         </el-menu-item>
@@ -81,12 +96,11 @@ const controlNav=()=>{
                       element-loading-text="加载中..."
                       element-loading-background="#000"
                       :class="{'el-img-loading':groupImgLoading}"
-                      src="https://smallhowe.top/img/QQGroup-small.png"
+                      :src="groupImg.smallImg"
                       loading="lazy"
                       :preview-teleported="true"
                       :hide-on-click-modal="true"
-                      :previewSrcList="['https://smallhowe.top/img/QQGroup.jpg']"
-                      @load="groupImgLoading=false"
+                      :previewSrcList="groupImg.bigImages"
             >
             </el-image>
           </div>
