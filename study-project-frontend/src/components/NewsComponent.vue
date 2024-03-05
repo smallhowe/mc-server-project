@@ -1,6 +1,7 @@
 <script setup>
 import {getNewsList} from "@/api/news.js";
 import {ref} from "vue";
+import {getMonthAndDay,formatDate} from "@/utils/DateUtils.js";
 
 const newsList = ref([])
 const total=ref(0)
@@ -21,13 +22,20 @@ const getNews=async ()=>{
   loading.value=false
 }
 getNews()
-const getMonthAndDay=(dateTime)=>{
-  const date=new Date(dateTime)
-  let month=date.getMonth()+1
-  month=String(month).padStart(2,'0')
-  let day=date.getDate()
-  day=String(day).padStart(2,'0')
-  return month + '-' + day;
+
+//公告内容模态框
+const showNews=ref(false)
+const newsObj=ref({
+  id:0,
+  title:'',
+  content:'',
+  author:'',
+  createTime:''
+})
+const clickNewsHandle=(data)=>{
+  console.log(data)
+  showNews.value = true;
+  newsObj.value=data
 }
 </script>
 
@@ -40,7 +48,7 @@ const getMonthAndDay=(dateTime)=>{
         </div>
       </template>
       <div class="content">
-        <div v-for="item in newsList" :key="item.id" class="news-item">
+        <div @click="clickNewsHandle(item)" v-for="item in newsList" :key="item.id" class="news-item">
           <span class="news-date">{{getMonthAndDay(item.createTime)}}</span>
           <span class="news-title">{{ item.title }}</span>
         </div>
@@ -53,6 +61,18 @@ const getMonthAndDay=(dateTime)=>{
       />
       </template>
     </el-card>
+
+    <el-dialog :title="newsObj.title" v-model="showNews" destroy-on-close>
+
+      <div class="news-other">
+        <span>发布者：{{newsObj.author}}</span>
+        <span>发布日期：{{formatDate(newsObj.createTime)}}</span>
+      </div>
+
+      <p class="news-content" v-html="newsObj.content"></p>
+
+    </el-dialog>
+
   </div>
 </template>
 
@@ -61,15 +81,22 @@ const getMonthAndDay=(dateTime)=>{
   justify-content: flex-end;
 }
 .content{
-
-  height: 285px;
+  user-select: none;
+  height: 300px;
 }
 .news-item{
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  &:not(:first-child){
-    margin-top: 20px;
+  padding: 10px 0;
+  cursor: pointer;
+  background: linear-gradient(to right, #fa1f1f, #f9d423, #25f217, #00bdff)
+              no-repeat right bottom;
+  background-size: 0 2px;
+  transition: background-size 0.3s ease-in;
+  &:hover{
+    background-position: left bottom;
+    background-size: 100% 2px;
   }
   .news-date{
     font-size: 12px;
@@ -82,5 +109,18 @@ const getMonthAndDay=(dateTime)=>{
     line-height: 18px;
 
   }
+}
+.news-other{
+  display: flex;
+  justify-content: space-between;
+  span{
+    color: #666;
+    font-size: 12px;
+  }
+}
+.news-content{
+  padding: 20px 0;
+  font-size: 16px;
+  color: #1c1c1c;
 }
 </style>
