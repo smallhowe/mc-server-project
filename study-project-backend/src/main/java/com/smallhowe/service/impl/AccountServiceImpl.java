@@ -40,7 +40,10 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper,Account> imple
     BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
     @Value("${spring.mail.username}")
     private String from;
-
+    @Value("${my.address}")
+    private String address;
+    @Value("${server.port}")
+    private String port;
     public boolean checkRedisCodeExpired(String pattern){
         Set<String> keys = null;
         keys = template.keys(pattern);
@@ -190,6 +193,7 @@ public class AccountServiceImpl extends ServiceImpl<AccountMapper,Account> imple
         account.setEmail(email);
         account.setUsername(username);
         account.setPassword(password);
+        account.setAvatarUrl(address + ":" + port + "/img/user_avatar/default-avatar.png");
         int status = mapper.insert(account);
         return status > 0 ? 1 : -1;
     }

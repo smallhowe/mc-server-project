@@ -12,9 +12,14 @@ export const useUserStore = defineStore('user', () => {
       await getUserInfo().then(res=>{
         if (res.data.status===200){
           user.value=res.data.data
-          loadImageAsBase64(res.data.data.avatarUrl).then(img=>{
-            user.value.avatarUrl=img
-          })
+
+          //判断是否有头像
+          if (res.data.data.avatar){
+            loadImageAsBase64(res.data.data.avatarUrl).then(img=>{
+              user.value.avatarUrl=img
+            })
+          }
+
           resolve()
         }else {
           //后端有响应，但是状态码不为200

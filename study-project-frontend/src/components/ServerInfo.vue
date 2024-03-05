@@ -24,6 +24,8 @@ watch(autoFlash,(val)=>{
   }else {
     clearInterval(autoFlashTimer.value)
   }
+},{
+  immediate: true
 })
 
 //用户信息

@@ -5,6 +5,7 @@ import {getLogOut} from "@/api/login.js";
 import {useRoute} from "vue-router";
 import UploadAvatar from "@/components/UploadAvatar.vue";
 import {loadImageAsBase64} from "@/utils/ImgToBase64.js";
+import {UserFilled} from "@element-plus/icons-vue";
 
 const store=useUserStore()
 
@@ -178,6 +179,7 @@ const controlNav=()=>{
       transform: scale(1.1);
       &::before{
         content: "更换头像";
+        z-index: 1000;
         position: absolute;
         display: flex;
         justify-content: center;
