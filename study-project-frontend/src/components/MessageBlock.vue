@@ -40,12 +40,14 @@ const formatDate=(date)=>{
 .message-block{
   cursor: pointer;
   background: white;
-  border: rgba(215, 215, 215, 0.41) 1px solid;
+  border-top: rgba(215, 215, 215, 0.41) 1px solid;
+  //border-bottom: rgba(215, 215, 215, 0.41) 1px solid;
   padding: 15px;
-  border-radius: 5px;
   width: 100%;
   transition: background-color 0.2s ease-in;
-  margin-bottom: 20px;
+  &:last-child{
+    border-bottom: rgba(215, 215, 215, 0.41) 1px solid;;
+  }
 }
 .message-block:hover{
   background: #f1f1f1;

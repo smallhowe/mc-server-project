@@ -15,14 +15,20 @@ export const useServerStore = defineStore('server',()=>{
     })
     const status=ref(0)
 
-    async function getServerInfo(){
-        const res=await getServerInfoRequest()
-        ElMessage.closeAll();
-        // console.log(res)
-        if (res.data.status!==200) return;
-        players.value=res.data.data.players
-        version.value=res.data.data.version
-        status.value = 1;
+    function getServerInfo(){
+        return new Promise(async (resolve,reject)=>{
+            const res=await getServerInfoRequest()
+            ElMessage.closeAll();
+            // console.log(res)
+            if (res.data.status!==200){
+                reject()
+                return
+            }
+            players.value=res.data.data.players
+            version.value=res.data.data.version
+            status.value = 1;
+            resolve()
+        })
     }
     return {
         players,

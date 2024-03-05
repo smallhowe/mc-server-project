@@ -1,8 +1,30 @@
 <script setup>
-import {computed, toRef} from "vue";
+import {computed, toRef,ref,watch} from "vue";
 import {useUserStore} from "@/stores/userStore.js";
 import {useServerStore} from "@/stores/serverStore.js";
+import {getServerInfoRequest} from "@/api/server.js";
+import {ElMessage} from "element-plus";
 
+
+//自动更新按钮
+const autoFlash = ref(Boolean(localStorage.getItem('autoFlash')) || false)
+const autoFlashTimer=ref(0)
+const changeAutoFlash=(val)=>{
+  if (val){
+    localStorage.setItem("autoFlash",'true')
+  }else{
+    localStorage.removeItem("autoFlash")
+  }
+}
+watch(autoFlash,(val)=>{
+  if (val){
+    autoFlashTimer.value=setInterval(()=>{
+      serverStore.getServerInfo()
+    },2000)
+  }else {
+    clearInterval(autoFlashTimer.value)
+  }
+})
 
 //用户信息
 const store = useUserStore();
@@ -38,11 +60,17 @@ const getServerPlayerPercent=computed(()=>{
   return Number.parseFloat(percentage.toFixed(2))
 })
 
+
 </script>
 
 <template>
   <div class="server-info">
     <el-card>
+      <el-row>
+        <el-col class="auto-flash">
+          <el-switch v-model="autoFlash" @change="changeAutoFlash" active-text="自动更新" />
+        </el-col>
+      </el-row>
       <el-row :gutter="10">
         <el-col :span="8" class="server-status">
           <el-progress
@@ -86,7 +114,14 @@ const getServerPlayerPercent=computed(()=>{
 <style lang="less" scoped>
 .server-info {
 }
-
+.auto-flash{
+  display: flex;
+  justify-content: flex-end;
+  user-select: none;
+}
+.el-row:not(:first-child){
+  margin-top: 15px;
+}
 .server-status {
   display: flex;
   flex-direction: column;

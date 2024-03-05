@@ -16,7 +16,7 @@ const downloadJava=()=>{
         </div>
       </template>
       <div class="download-group">
-        <span>请确保安装好后Java再运行客户端</span>
+        <span>请确保安装好Java后再运行客户端</span>
         <button class="block btn download-client" @click="router.push('/index/download')">下载客户端</button>
         <button class="block btn download-java" @click="downloadJava">下载Java</button>
       </div>
