@@ -2,35 +2,55 @@ package com.smallhowe.entity;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 public class Levels {
+    private static final int MAX_LEVEL = 10;
+
     private Integer level;
     private Long exp;
-
     public Levels(Integer level, Long exp) {
         this.level = level;
         this.exp = exp;
     }
 
-    public static Levels getMaxLevel(){
-        return initLevels().get(initLevels().size()-1);
+    public static void setAccountLevelStatus(Account account) {
+        List<Levels> list=initLevels();
+        account.setLevelList(list);
+
+        for (int i = list.size() - 1; i >= 0; i--) {
+            //如果账户的经验大于当前等级的经验，则设置为当前等级
+            if (account.getExp() >= list.get(i).getExp()) {
+                account.setLevel(list.get(i).getLevel());
+                if (account.getExp() >= list.get(i).getExp()) {
+                    account.setLevel(list.get(i).getLevel());
+
+                    if (account.getLevel().equals(MAX_LEVEL)){
+                        account.setNextExp(0L);
+                    }else{
+                        account.setNextExp(list.get(i+1).getExp());
+                    }
+                    break;
+                }
+            }
+        }
+
     }
 
-    public static List<Levels> initLevels(){
-        return List.of(
-                new Levels(0, 0L),
-                new Levels(1, 100L), // +200
-                new Levels(2, 300L), // +300
-                new Levels(3, 600L), // +400
-                new Levels(4, 1000L), // +500
-                new Levels(5, 1500L), // +600
-                new Levels(6, 2100L), // +700
-                new Levels(7, 2800L), // +800
-                new Levels(8, 4600L), // +900
-                new Levels(9, 5500L), // +1000
-                new Levels(10, 6500L)
-        );
+    public static Levels getMaxLevel(){
+        List<Levels> list = initLevels();
+        return list.get(list.size() - 1);
+    }
+
+    private static List<Levels> initLevels(){
+        long exp = 0;
+        List<Levels> list = new ArrayList<>();
+        for (int i=0;i<=MAX_LEVEL;i++){
+            exp += i * 100L;
+            list.add(new Levels(i,exp));
+        }
+        return list;
     }
 }

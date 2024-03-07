@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 
 import com.smallhowe.entity.Account;
+import com.smallhowe.entity.Levels;
 import com.smallhowe.entity.mc.StatusResponse;
 import com.smallhowe.mapper.AccountMapper;
 import com.smallhowe.mapper.SignInMapper;
@@ -18,6 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @SpringBootTest
@@ -34,11 +38,16 @@ class StudyProjectBackendApplicationTests {
     private static final int MC_SERVER_PORT = 25565;
     @Test
     void contextLoads() throws IOException {
-//        ServerListPing serverListPing = new ServerListPing();
-//        InetSocketAddress address = new InetSocketAddress("127.0.0.1", MC_SERVER_PORT);
-//        serverListPing.setAddress(address);
-//        StatusResponse statusResponse = serverListPing.fetchData();
-//        System.out.println(statusResponse);
+        int maxLevel = 100000;
+        long exp = 0;
+        List<Levels> list = new ArrayList<>();
+        long start = System.currentTimeMillis();
+        for (int i=0;i<=maxLevel;i++){
+
+            list.add(new Levels(i, exp));
+        }
+//        System.out.println(list);
+        System.out.println("耗时："+(System.currentTimeMillis()-start));
 
 
     }

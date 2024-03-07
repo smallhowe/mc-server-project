@@ -48,22 +48,12 @@ public class UserController {
     public RestBean<Object> me(@SessionAttribute("account") Account account){
         account.setPassword(null);
         account.setAvatarPath(null);
-        List<Levels> initLevels = Levels.initLevels();
-        account.setLevelList(initLevels);
 
-        Integer maxLevel = initLevels.get(initLevels.size() - 1).getLevel();
+        //设置等级状态
+        Levels.setAccountLevelStatus(account);
 
-        for (int i = initLevels.size() - 1; i >= 0; i--) {
-            if (account.getExp() >= initLevels.get(i).getExp()) {
-                account.setLevel(initLevels.get(i).getLevel());
-                if (account.getLevel().equals(maxLevel)){
-                    account.setNextExp(0L);
-                }else{
-                    account.setNextExp(initLevels.get(i+1).getExp());
-                }
-                break;
-            }
-        }
+//        System.out.println(account);
+
 
         return RestBean.success(null,account);
     }
