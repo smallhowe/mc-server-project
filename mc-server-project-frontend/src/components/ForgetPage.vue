@@ -149,7 +149,9 @@ const forgetForm=ref()
               </el-col>
             </el-form-item>
             <el-button plain type="primary"  class="submit-btn"  tabindex="7" @click="startReset">重置</el-button>
+            <el-button style="margin-left: 0;margin-top: 30px" class="submit-btn" plain  tabindex="8" @click="router.back">返回</el-button>
           </el-form>
+
       </div>
       </transition>
       <transition name="el-fade-in" mode="out-in">

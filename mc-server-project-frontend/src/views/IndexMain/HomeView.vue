@@ -62,14 +62,14 @@ const signIn = () => {
 
     <el-row justify="space-between">
       <!-- 主页左侧内容 -->
-      <el-col class="left" :span="24" :md="16">
+      <el-col class="left" :span="24" :lg="16">
         <!-- 服务器信息 -->
         <ServerInfo></ServerInfo>
         <CarouselComponent></CarouselComponent>
       </el-col>
 
       <!-- 主页右侧内容 -->
-      <el-col class="right" :span="24" :md="8" >
+      <el-col class="right" :span="24" :lg="8" >
         <!--公告-->
         <NewsComponent/>
         <GotoDownload/>
@@ -95,12 +95,12 @@ const signIn = () => {
   }
 }
 .left{
-  @media (min-width: 992px) {
+  @media (min-width: 1200px) {
     padding-right: 10px;
   }
 }
 .right{
-  @media (min-width: 992px) {
+  @media (min-width: 1200px) {
     padding-left: 10px;
   }
   padding-bottom: 20px;

@@ -98,7 +98,7 @@ const uploadAvatar=()=>{
              :append-to-body="true"
              destroy-on-close
              title="上传头像"
-             style="min-width: 468px"
+             style="min-width: 478px"
   >
     <div class="upload-avatar">
       <el-upload
@@ -106,7 +106,7 @@ const uploadAvatar=()=>{
           class="avatar-uploader"
           :auto-upload="false"
           :show-file-list="false"
-          accept=".png,.jpg"
+          accept=".png,.jpg,.jpeg"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
           :on-change="postChange"
@@ -150,10 +150,14 @@ const uploadAvatar=()=>{
 <!--      </div>-->
     </div>
 
+    <div class="tips">
+      <p>仅允许200像素以内且为JPG、JPEG、PNG格式，图片大小不超过10M</p>
+    </div>
+
     <div class="total-btn" v-if="options.img!==''">
       <div class="re-select-avatar">
         <el-upload
-            accept=".png,.jpg"
+            accept=".png,.jpg,.jpeg"
             :auto-upload="false"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
@@ -202,6 +206,14 @@ const uploadAvatar=()=>{
 .cat{
   width: 200px;
   height: 200px;
+  min-width: 200px;
+}
+.tips{
+  margin: 20px 0;
+  display: flex;
+  font-size: 0.75rem;
+  justify-content: center;
+  color: #999;
 }
 .total-btn{
   margin-top: 20px;
