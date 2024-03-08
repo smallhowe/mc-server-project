@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.smallhowe</groupId>
-    <artifactId>study-project-backend</artifactId>
+    <artifactId>mc-server-project-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>study-project-backend</name>
-    <description>study-project-backend</description>
+    <name>mc-server-project-backend</name>
+    <description>mc-server-project-backend</description>
     <properties>
         <java.version>17</java.version>
     </properties>
