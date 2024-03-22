@@ -1,4 +1,5 @@
 <script setup>
+import {formatDate} from "../utils/DateUtils.js";
 
 defineProps({
   title:{
@@ -15,15 +16,6 @@ defineProps({
   }
 })
 
-const formatDate=(date)=>{
-  let year=date.getFullYear()
-  let month=date.getMonth()+1
-  let day=date.getDate()
-  let hour=date.getHours()
-  let minute=date.getMinutes()
-
-  return year+"年"+month.toString().padStart(2,"0")+"月"+day+"日 "+hour+":"+minute.toString().padStart(2,"0")
-}
 </script>
 
 <template>

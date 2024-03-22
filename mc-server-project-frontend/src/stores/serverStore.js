@@ -21,6 +21,9 @@ export const useServerStore = defineStore('server',()=>{
             ElMessage.closeAll();
             // console.log(res)
             if (res.data.status!==200){
+                players.value={online:0,max:0}
+                version.value={name:"",protocol:0}
+                status.value = 0
                 reject()
                 return
             }

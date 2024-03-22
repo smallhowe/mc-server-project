@@ -4,6 +4,7 @@ import {useUserStore} from "@/stores/userStore.js";
 import {ref,reactive,computed} from "vue";
 import {postBindUserGameId, postResetPassword} from "@/api/user.js";
 import {ElMessage} from "element-plus";
+import {formatDate} from "@/utils/DateUtils.js";
 
 const store = useUserStore();
 const userinfo={
@@ -37,6 +38,7 @@ const bindGameId= async ()=>{
 const form1=reactive({
   email:userinfo.email,
   username:userinfo.username,
+  createTime:formatDate(userinfo.createTime),
   gameId:userinfo.gameId
 })
 const checkGameId=(rule,value,callback)=>{
@@ -126,7 +128,7 @@ const onUpdatePass=async ()=>{
         <el-menu-item index="1">基本信息</el-menu-item>
         <el-menu-item index="2">修改密码</el-menu-item>
       </el-menu>
-      <div style="height: 400px;overflow: hidden">
+      <div style="height: 500px;overflow: hidden">
       <transition name="el-zoom-in-center" mode="out-in">
           <el-form v-show="activeIndex === '1'" :model="form1" class="form" label-position="top">
             <el-form-item prop="email" label="邮箱">
@@ -137,6 +139,9 @@ const onUpdatePass=async ()=>{
             </el-form-item>
             <el-form-item label="身份">
               <el-input :value="userGroup" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="创建日期">
+              <el-input :value="form1.createTime" disabled></el-input>
             </el-form-item>
             <el-form-item prop="gameId" label="游戏ID" :rules="gameIdRule">
               <el-input v-model="form1.gameId" @input="disableSaveBtn=false" placeholder="请输入游戏ID"></el-input>

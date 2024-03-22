@@ -3,55 +3,71 @@ package com.smallhowe;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 
-import com.smallhowe.entity.Account;
-import com.smallhowe.entity.Levels;
-import com.smallhowe.entity.mc.StatusResponse;
-import com.smallhowe.mapper.AccountMapper;
-import com.smallhowe.mapper.SignInMapper;
-import com.smallhowe.utils.ServerListPing;
-import jakarta.annotation.Resource;
+
+import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Random;
 
 
 @SpringBootTest
 class StudyProjectBackendApplicationTests {
-    @Resource
-    StringRedisTemplate template;
-    @Resource
-    SignInMapper signInMapper;
-    @Resource
-    AccountMapper accountMapper;
-    @Resource
-    BCryptPasswordEncoder passwordEncoder;
+//    @Resource
+//    StringRedisTemplate template;
+//    @Resource
+//    SignInMapper signInMapper;
+//    @Resource
+//    AccountMapper accountMapper;
+//    @Resource
+//    BCryptPasswordEncoder passwordEncoder;
 
-    private static final int MC_SERVER_PORT = 25565;
+//    private static final int MC_SERVER_PORT = 25565;
     @Test
-    void contextLoads() throws IOException {
-        int maxLevel = 100000;
-        long exp = 0;
-        List<Levels> list = new ArrayList<>();
+    void contextLoads()  {
         long start = System.currentTimeMillis();
-        for (int i=0;i<=maxLevel;i++){
 
-            list.add(new Levels(i, exp));
+        for (int i=0;i<10;i++){
+            choujiang();
         }
-//        System.out.println(list);
-        System.out.println("耗时："+(System.currentTimeMillis()-start));
 
 
+        System.out.println("运行时长："+(System.currentTimeMillis()-start));
     }
 
+    void choujiang(){
+        @Data
+        class Jp{
+            private String name;
+            private int gl;
+
+            public Jp(String name, int gl) {
+                this.name = name;
+                this.gl = gl;
+            }
+        }
+
+        List<Jp> list = List.of(
+                new Jp("一等奖", 300),
+                new Jp("二等奖", 1200),
+                new Jp("三等奖", 3500),
+                new Jp("没中奖", 10000)
+        );
+
+
+        Random random = new Random();
+
+        int swi = random.nextInt(1,10001);
+        for (Jp jp:list){
+            if (swi<=jp.getGl()){
+                System.out.println(swi+"中了"+jp.getName());
+                break;
+            }
+        }
+    }
 
 
     @Value("${spring.datasource.url}")

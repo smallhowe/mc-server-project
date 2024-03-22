@@ -19,7 +19,7 @@ const props=defineProps({
 })
 const emit=defineEmits(['update:showDialog'])
 const cropper=ref()
-// const imageUrl=ref('')
+const imageUrl=ref('')
 const options=reactive({
   img:'',
   outputSize:1,
@@ -34,26 +34,11 @@ const options=reactive({
   centerBox:true,
   fixed:true,
   fixedNumber:[1,1],
+  high:false,
   fixedBox:true, //固定截图框大小
   canMoveBox:false, //截图框能否拖动
   info:false //裁剪框的大小信息
 })
-
-const handleAvatarSuccess = (response,uploadFile) => {
-  imageUrl.value = URL.createObjectURL(uploadFile.raw)
-  console.log(imageUrl.value)
-}
-
-const beforeAvatarUpload= (rawFile) => {
-  if (rawFile.type !== 'image/jpeg') {
-    ElMessage.error('Avatar picture must be JPG format!')
-    return false
-  } else if (rawFile.size / 1024 / 1024 > 10) {
-    ElMessage.error('Avatar picture size can not exceed 2MB!')
-    return false
-  }
-  return true
-}
 
 let fileName=ref('')
 const postChange = (val) => {
@@ -107,8 +92,6 @@ const uploadAvatar=()=>{
           :auto-upload="false"
           :show-file-list="false"
           accept=".png,.jpg,.jpeg"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
           :on-change="postChange"
       >
         <div class="addImg">
@@ -132,6 +115,7 @@ const uploadAvatar=()=>{
           :center-box="options.centerBox"
           :fixed="options.fixed"
           :fixed-number="options.fixedNumber"
+          :high="options.high"
           :fixed-box="options.fixedBox"
           :can-move-box="options.canMoveBox"
           :info="options.info"
@@ -160,8 +144,6 @@ const uploadAvatar=()=>{
             accept=".png,.jpg,.jpeg"
             :auto-upload="false"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
             :on-change="postChange"
         >
           <el-button type="primary" icon="Refresh">重新选择</el-button>

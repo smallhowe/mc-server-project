@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 import {useUserStore} from "@/stores/userStore.js";
 
 
@@ -34,15 +34,15 @@ const router = createRouter({
             name: 'index',
             component: () => import('@/views/IndexView.vue'),
             redirect:'/index/home',
-            children:[
+            children: [
                 {
-                    name:'home',
+                    name: 'home',
                     path: 'home',
                     component: () => import('@/views/IndexMain/HomeView.vue'),
                 },
                 {
                     name: 'message',
-                    path:'message',
+                    path: 'message',
                     component: () => import('@/views/IndexMain/MessageView.vue'),
                 },
                 {

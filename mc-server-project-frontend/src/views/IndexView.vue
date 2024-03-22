@@ -30,7 +30,7 @@ msgStore.getMsgList(1)
   width: 100vw;
   height: 100vh;
   position: relative;
-  min-width: 600px;
+  min-width: 685px;
 }
 .index-bg{
   background-image: url("https://www.smallhowe.top/img/503454.jpg");

@@ -2,8 +2,6 @@
 import {computed, toRef,ref,watch} from "vue";
 import {useUserStore} from "@/stores/userStore.js";
 import {useServerStore} from "@/stores/serverStore.js";
-import {getServerInfoRequest} from "@/api/server.js";
-import {ElMessage} from "element-plus";
 
 
 //自动更新按钮
@@ -85,16 +83,13 @@ const getServerPlayerPercent=computed(()=>{
           <p :class="serverStatus===1?'server-status-online':'server-status-offline'">
             {{ serverStatus===1 ? '在线' : '离线' }}
           </p>
-<!--          <el-button :type="serverInfo.serverStatus===1?'danger':'success'" @click="controlServe">-->
-<!--            {{ serverInfo.serverStatus === 1 ? '关闭' : '开启' }}-->
-<!--          </el-button>-->
           <p>服务器运行状态</p>
         </el-col>
         <!--服务器玩家数量-->
         <el-col :span="8" class="server-player">
           <el-progress :percentage="getServerPlayerPercent" type="circle"/>
           <p> {{serverPlayer.online}} / {{serverPlayer.max}} </p>
-          <p>服务器当前玩家数量</p>
+          <p>服务器内玩家数量</p>
         </el-col>
         <!--玩家账户等级-->
         <el-col :span="8" class="server-account">

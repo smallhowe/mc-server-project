@@ -14,11 +14,11 @@ export const useUserStore = defineStore('user', () => {
           user.value=res.data.data
 
           //判断是否有头像
-          if (res.data.data.avatarUrl){
+
             loadImageAsBase64(res.data.data.avatarUrl).then(img=>{
               user.value.avatarUrl=img
             })
-          }
+
 
           resolve()
         }else {
