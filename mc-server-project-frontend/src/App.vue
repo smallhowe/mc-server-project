@@ -6,22 +6,13 @@ import router from "@/router/index.js";
 import {ElMessage} from "element-plus"
 
 const store = useUserStore();
-// getUserInfo().then(res=>{
-//   if (res.data.status===200){
-//     // console.log(res.data.data)
-//     store.user=res.data.data
-//     router.replace("/index")
-//   }else{
-//     ElMessage.closeAll()
-//     router.replace("/login")
-//   }
-// })
 store.loadUserInfo().then(()=>{
   router.replace("/index")
 }).catch(()=>{
   ElMessage.closeAll()
   router.replace("/login")
 })
+
 </script>
 
 <template>

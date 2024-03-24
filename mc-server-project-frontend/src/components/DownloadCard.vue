@@ -1,5 +1,11 @@
 <script setup>
-defineProps({
+import {useUserStore} from "@/stores/userStore.js";
+import {toRef,ref} from "vue";
+import UpdateResource from "@/components/admin/UpdateResource.vue";
+
+const userStore = useUserStore();
+const user=toRef(userStore.user)
+const props=defineProps({
   data:{
     type: Object,
     default: {
@@ -9,16 +15,35 @@ defineProps({
       url: '#',
       content: '这是文件的内容'
     }
+  },
+  type:{
+    type: Number,
+    required:true
   }
 })
+const emit=defineEmits(['uploadSuccess'])
+
+const showDialog = ref(false)
+const form=ref({
+  title: props.data.title,
+  version: props.data.version,
+  content: props.data.content,
+  type: props.type
+})
+
 </script>
 
 <template>
   <div class="download-card">
     <el-card class="box-card">
       <template #header>
-          <strong style="font-weight: bold;">{{data.title}}</strong>
-          <el-link :href="data.url" style="float: right; padding: 3px 0" type="primary" :underline="false">下载</el-link>
+          <div class="header">
+            <strong style="font-weight: bold;">{{data.title}}</strong>
+            <div>
+              <el-link v-if="user.groups===1" @click="showDialog=true"  type="danger" :underline="false">更新</el-link>
+              <el-link :href="data.url"  type="primary" :underline="false">下载</el-link>
+            </div>
+          </div>
       </template>
       <el-row class="top">
         <el-col :span="12">版本：{{data.version}}</el-col>
@@ -28,10 +53,22 @@ defineProps({
         {{data.content}}
       </div>
     </el-card>
+    <!--  管理员操作 -->
+    <UpdateResource v-model="showDialog" v-model:form="form" @upload-success="emit('uploadSuccess',$event)" ></UpdateResource>
   </div>
+
 </template>
 
 <style scoped lang="less">
+.header{
+  display: flex;
+  justify-content: space-between;
+  &>div:last-child{
+    &>*{
+      margin: 0 10px;
+    }
+  }
+}
 .top{
   font-size: 14px;
   color: #838383;
@@ -42,4 +79,5 @@ defineProps({
 .content{
   margin-top: 5px;
 }
+
 </style>

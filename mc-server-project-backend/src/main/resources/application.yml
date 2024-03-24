@@ -19,12 +19,12 @@ spring:
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
   mail:
-    host: smtp.qq.com
-    username: smallhowe@qq.com
-    password: mfvrlpafndujdfia
+    host: smtp.163.com
+    username: smallhowe2024@163.com
+    password: HIPXGCIKEXBJKHRS
     port: 465
     properties:
-      from: smallhowe@qq.com
+      from: smallhowe
       mail:
         smtp:
           auth: true

@@ -5,7 +5,6 @@ const request=axios.create({
     baseURL: 'http://localhost:8085',
     timeout: 5000
 })
-
 // 添加请求拦截器
 request.interceptors.request.use(function (request) {
     // 在发送请求之前做些什么
