@@ -6,7 +6,7 @@ import { ref,toRef} from "vue";
 import CarouselComponent from "@/components/CarouselComponent.vue";
 import GotoDownload from "@/components/GotoDownload.vue";
 import {useUserStore} from "@/stores/userStore.js";
-import {getUserInfo, userSignIn} from "@/api/user.js";
+import {userSignIn} from "@/api/user.js";
 
 const store = useUserStore();
 const userinfo=toRef(store,'user')

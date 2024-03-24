@@ -48,8 +48,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 10GB
+      max-request-size: 10GB
   web:
     resources:
       static-locations: file:D:/static/ #网页存放路径

@@ -76,7 +76,7 @@ class StudyProjectBackendApplicationTests {
     private String username;
     @Value("${spring.datasource.password}")
     private String password;
-//    @Test
+    @Test
     void createGenerator() {
         String projectPath = System.getProperty("user.dir");
         //使用mybatis-plus-generator生成模板

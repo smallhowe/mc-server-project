@@ -1,5 +1,4 @@
 <script setup>
-
 import TitleCard from "@/components/TitleCard.vue";
 import DownloadBlock from "@/components/DownloadBlock.vue";
 </script>
