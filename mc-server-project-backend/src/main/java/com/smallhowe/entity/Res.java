@@ -29,12 +29,12 @@ public class Res implements Serializable {
     /**
      * 文件名
      */
-    private String name;
+    private String title;
 
     /**
      * 文件大小，单位MB
      */
-    private Long size;
+    private String size;
 
     private String url;
 

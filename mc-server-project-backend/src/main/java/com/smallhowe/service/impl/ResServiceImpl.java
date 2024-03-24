@@ -57,14 +57,14 @@ public class ResServiceImpl extends ServiceImpl<ResMapper, Res> implements ResSe
             fileUtils.deleteFile(selRes.getPath());
         }
 
-        selRes.setName(res.getName());
+        selRes.setTitle(res.getTitle());
         selRes.setContent(res.getContent());
         selRes.setVersion(res.getVersion());
 
         String savePath = fileUtils.saveFile(res, file, path);
         selRes.setPath(savePath);
 
-        selRes.setSize(file.getSize());
+        selRes.setSize(fileUtils.formatFileSize(file.getSize()));
 
         String url = address + ":" + port + "/resource/download/" + file.getOriginalFilename();
         selRes.setUrl(url);
