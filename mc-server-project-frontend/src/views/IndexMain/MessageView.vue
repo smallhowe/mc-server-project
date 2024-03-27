@@ -65,7 +65,7 @@ const changeTab=(targetName)=>{
     <TitleCard title="消息中心" icon="el-icon-message" />
     <el-card class="msg-box">
       <el-tabs
-          :active-name="activeTab"
+          :model-value="activeTab"
           type="card"
           class="demo-tabs"
           @tab-remove="removeTab"

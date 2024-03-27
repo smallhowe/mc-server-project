@@ -144,7 +144,6 @@ const controlNav=()=>{
 .el-menu{
   scrollbar-width: none;
   height: 100%;
-  overflow-y: scroll;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
