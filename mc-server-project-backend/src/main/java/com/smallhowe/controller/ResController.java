@@ -27,20 +27,15 @@ public class ResController {
     private ResService resService;
 
     @PostMapping("/upload")
-    public RestBean<Object> uploadRes(Res res, MultipartFile file, @SessionAttribute("account")Account account,int type){
+    public RestBean<Object> uploadRes(Res res, MultipartFile file, @SessionAttribute("account")Account account){
         if (account.getGroups()!=1)
             return RestBean.failure(403,"权限不足");
+        //设置操作者
+        res.setOperator(account.getUsername());
+        int flag = resService.updateRes(res, file);
+        if (flag==1) return RestBean.success("上传成功");
+        else return RestBean.failure(500,"上传失败");
 
-        if (type==0){
-            int flag = resService.updateClient(res, file);
-            if (flag==1) return RestBean.success("上传成功");
-            else return RestBean.failure(500,"上传失败");
-        } else if (type==1) {
-            int flag = resService.updateMods(res, file);
-            if (flag==1) return RestBean.success("上传成功");
-            else return RestBean.failure(500,"上传失败");
-        }
-        return RestBean.failure(400, "参数错误");
     }
     @GetMapping("/list")
     public RestBean<Object> getResList(){

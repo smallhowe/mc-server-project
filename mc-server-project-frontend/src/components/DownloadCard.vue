@@ -2,6 +2,7 @@
 import {useUserStore} from "@/stores/userStore.js";
 import {toRef,ref} from "vue";
 import UpdateResource from "@/components/admin/UpdateResource.vue";
+import {formatDate} from "@/utils/DateUtils.js";
 
 const userStore = useUserStore();
 const user=toRef(userStore.user)
@@ -15,20 +16,16 @@ const props=defineProps({
       url: '#',
       content: '这是文件的内容'
     }
-  },
-  type:{
-    type: Number,
-    required:true
   }
 })
 const emit=defineEmits(['uploadSuccess'])
 
 const showDialog = ref(false)
 const form=ref({
+  id: props.data.id,
   title: props.data.title,
   version: props.data.version,
-  content: props.data.content,
-  type: props.type
+  content: props.data.content
 })
 
 </script>
@@ -46,6 +43,8 @@ const form=ref({
           </div>
       </template>
       <el-row class="top">
+        <el-col :span="12">操作者：{{data.operator}}</el-col>
+        <el-col :span="12">更新日期：{{formatDate(data.updateTime)}}</el-col>
         <el-col :span="12">版本：{{data.version}}</el-col>
         <el-col :span="12">大小：{{data.size}}</el-col>
       </el-row>
@@ -72,12 +71,13 @@ const form=ref({
 .top{
   font-size: 14px;
   color: #838383;
-  &>*:last-child{
+  &>*:nth-child(2n){
     text-align: right;
   }
 }
 .content{
   margin-top: 5px;
+  font-size: 16px;
 }
 
 </style>

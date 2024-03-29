@@ -1,5 +1,5 @@
 <script setup>
-import {ref,reactive,watch,nextTick} from "vue";
+import {ref,reactive} from "vue";
 import {postGetCode,postStartReset,postDoReset} from "@/api/reset-password.js";
 import router from "@/router/index.js";
 import {ElMessage} from "element-plus";

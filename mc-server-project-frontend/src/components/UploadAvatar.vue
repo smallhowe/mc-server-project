@@ -1,7 +1,7 @@
 <script setup>
 import 'vue-cropper/dist/index.css'
 import { VueCropper }  from "vue-cropper";
-import {ref,reactive,defineProps,defineEmits,toRef} from 'vue';
+import {ref,reactive,toRef} from 'vue';
 import {useUserStore} from "@/stores/userStore.js";
 import {Plus} from "@element-plus/icons-vue";
 import PreviewAvatar from "@/components/PreviewAvatar.vue";

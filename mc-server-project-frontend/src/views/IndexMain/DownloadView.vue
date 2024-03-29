@@ -24,7 +24,6 @@ getList()
         <DownloadCard v-for="(data,index) in resList"
                       :key="data.id"
                       :data="data"
-                      :type="index"
                       @upload-success="getList"
         ></DownloadCard>
         <a href="https://www.oracle.com/cn/java/technologies/downloads/" target="_blank">

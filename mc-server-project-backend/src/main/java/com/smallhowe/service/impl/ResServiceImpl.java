@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
 /**
  * <p>
  *  服务实现类
@@ -29,25 +31,25 @@ public class ResServiceImpl extends ServiceImpl<ResMapper, Res> implements ResSe
     private String path;
     @Resource
     private ResMapper resMapper;
-    public int updateClient(Res res, MultipartFile file) {
-        res.setId(1);
-        boolean flag = updateRes(res, file);
-        if (flag){
-            return 1;
-        }
-
-        return 0;
-    }
-    public int updateMods(Res res, MultipartFile file) {
-        res.setId(2);
-        boolean flag = updateRes(res, file);
-        if (flag){
-            return 1;
-        }
-
-        return 0;
-    }
-    private boolean updateRes(Res res,MultipartFile file) {
+//    public int updateClient(Res res, MultipartFile file) {
+//        res.setId(1);
+//        boolean flag = updateRes(res, file);
+//        if (flag){
+//            return 1;
+//        }
+//
+//        return 0;
+//    }
+//    public int updateMods(Res res, MultipartFile file) {
+//        res.setId(2);
+//        boolean flag = updateRes(res, file);
+//        if (flag){
+//            return 1;
+//        }
+//
+//        return 0;
+//    }
+    public int updateRes(Res res,MultipartFile file) {
         FileUtils fileUtils = new FileUtils();
         Res selRes = resMapper.selectById(res.getId());
 //        System.out.println("查询到的数据"+selRes);
@@ -69,8 +71,9 @@ public class ResServiceImpl extends ServiceImpl<ResMapper, Res> implements ResSe
         String url = address + ":" + port + "/resource/download/" + file.getOriginalFilename();
         selRes.setUrl(url);
 
-        resMapper.updateById(selRes);
+        selRes.setOperator(res.getOperator());
+        selRes.setUpdateTime(LocalDateTime.now());
 
-        return true;
+        return resMapper.updateById(selRes);
     }
 }

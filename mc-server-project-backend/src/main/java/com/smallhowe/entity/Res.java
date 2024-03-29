@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 import lombok.Getter;
@@ -32,7 +33,7 @@ public class Res implements Serializable {
     private String title;
 
     /**
-     * 文件大小，单位MB
+     * 文件大小
      */
     private String size;
 
@@ -43,4 +44,8 @@ public class Res implements Serializable {
     private String version;
 
     private String content;
+
+    private LocalDateTime updateTime;
+
+    private String operator;
 }

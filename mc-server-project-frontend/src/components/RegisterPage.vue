@@ -1,5 +1,5 @@
 <script setup>
-import {ref,onMounted} from "vue";
+import {ref} from "vue";
 import router from "@/router/index.js";
 import {ElMessage} from "element-plus";
 import {postGetCode,postRegister} from "@/api/register.js";
